@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  team: MyString
+  week: 1
+  year: 1
+  wins: 1
+  losses: 1
+  percentage: 1.5
+
+two:
+  team: MyString
+  week: 1
+  year: 1
+  wins: 1
+  losses: 1
+  percentage: 1.5

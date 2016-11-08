@@ -1,0 +1,968 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: images; Type: TABLE; Schema: public; Owner: tcrosley; Tablespace: 
+--
+
+CREATE TABLE images (
+    id integer NOT NULL,
+    team_name character varying(255),
+    url character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+ALTER TABLE public.images OWNER TO tcrosley;
+
+--
+-- Name: images_id_seq; Type: SEQUENCE; Schema: public; Owner: tcrosley
+--
+
+CREATE SEQUENCE images_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.images_id_seq OWNER TO tcrosley;
+
+--
+-- Name: images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tcrosley
+--
+
+ALTER SEQUENCE images_id_seq OWNED BY images.id;
+
+
+--
+-- Name: publish_checkers; Type: TABLE; Schema: public; Owner: tcrosley; Tablespace: 
+--
+
+CREATE TABLE publish_checkers (
+    id integer NOT NULL,
+    website character varying(255),
+    publish_tok character varying(255),
+    week integer,
+    year integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+ALTER TABLE public.publish_checkers OWNER TO tcrosley;
+
+--
+-- Name: publish_checkers_id_seq; Type: SEQUENCE; Schema: public; Owner: tcrosley
+--
+
+CREATE SEQUENCE publish_checkers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.publish_checkers_id_seq OWNER TO tcrosley;
+
+--
+-- Name: publish_checkers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tcrosley
+--
+
+ALTER SEQUENCE publish_checkers_id_seq OWNED BY publish_checkers.id;
+
+
+--
+-- Name: ranks; Type: TABLE; Schema: public; Owner: tcrosley; Tablespace: 
+--
+
+CREATE TABLE ranks (
+    id integer NOT NULL,
+    website character varying(255),
+    team character varying(255),
+    rank integer,
+    week integer,
+    year integer,
+    description character varying(255),
+    article_link character varying(255),
+    published timestamp without time zone,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+ALTER TABLE public.ranks OWNER TO tcrosley;
+
+--
+-- Name: ranks_id_seq; Type: SEQUENCE; Schema: public; Owner: tcrosley
+--
+
+CREATE SEQUENCE ranks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.ranks_id_seq OWNER TO tcrosley;
+
+--
+-- Name: ranks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tcrosley
+--
+
+ALTER SEQUENCE ranks_id_seq OWNED BY ranks.id;
+
+
+--
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: tcrosley; Tablespace: 
+--
+
+CREATE TABLE schema_migrations (
+    version character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.schema_migrations OWNER TO tcrosley;
+
+--
+-- Name: scrape_configs; Type: TABLE; Schema: public; Owner: tcrosley; Tablespace: 
+--
+
+CREATE TABLE scrape_configs (
+    id integer NOT NULL,
+    website character varying(255),
+    url character varying(255),
+    rank_xpath character varying(255),
+    rank_regex character varying(255),
+    team_xpath character varying(255),
+    team_regex character varying(255),
+    description_xpath character varying(255),
+    description_regex character varying(255),
+    update_checker_xpath character varying(255),
+    update_checker_regex character varying(255),
+    week integer,
+    year integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+ALTER TABLE public.scrape_configs OWNER TO tcrosley;
+
+--
+-- Name: scrape_configs_id_seq; Type: SEQUENCE; Schema: public; Owner: tcrosley
+--
+
+CREATE SEQUENCE scrape_configs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.scrape_configs_id_seq OWNER TO tcrosley;
+
+--
+-- Name: scrape_configs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tcrosley
+--
+
+ALTER SEQUENCE scrape_configs_id_seq OWNED BY scrape_configs.id;
+
+
+--
+-- Name: widgets; Type: TABLE; Schema: public; Owner: tcrosley; Tablespace: 
+--
+
+CREATE TABLE widgets (
+    id integer NOT NULL,
+    name character varying(255),
+    description text,
+    stock integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+ALTER TABLE public.widgets OWNER TO tcrosley;
+
+--
+-- Name: widgets_id_seq; Type: SEQUENCE; Schema: public; Owner: tcrosley
+--
+
+CREATE SEQUENCE widgets_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.widgets_id_seq OWNER TO tcrosley;
+
+--
+-- Name: widgets_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tcrosley
+--
+
+ALTER SEQUENCE widgets_id_seq OWNED BY widgets.id;
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tcrosley
+--
+
+ALTER TABLE ONLY images ALTER COLUMN id SET DEFAULT nextval('images_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tcrosley
+--
+
+ALTER TABLE ONLY publish_checkers ALTER COLUMN id SET DEFAULT nextval('publish_checkers_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tcrosley
+--
+
+ALTER TABLE ONLY ranks ALTER COLUMN id SET DEFAULT nextval('ranks_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tcrosley
+--
+
+ALTER TABLE ONLY scrape_configs ALTER COLUMN id SET DEFAULT nextval('scrape_configs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tcrosley
+--
+
+ALTER TABLE ONLY widgets ALTER COLUMN id SET DEFAULT nextval('widgets_id_seq'::regclass);
+
+
+--
+-- Data for Name: images; Type: TABLE DATA; Schema: public; Owner: tcrosley
+--
+
+COPY images (id, team_name, url, created_at, updated_at) FROM stdin;
+1	Washington Nationals	http://sports.cbsimg.net/images/mlb/logos/90x90/WAS.png	\N	\N
+2	Pittsburgh Pirates	http://sports.cbsimg.net/images/mlb/logos/90x90/PIT.png	\N	\N
+3	St. Louis Cardinals	http://sports.cbsimg.net/images/mlb/logos/90x90/STL.png	\N	\N
+4	Seattle Mariners	http://sports.cbsimg.net/images/mlb/logos/90x90/SEA.png	\N	\N
+6	Los Angeles Dodgers	http://sports.cbsimg.net/images/mlb/logos/90x90/LAD.png	\N	\N
+7	Los Angeles Angels	http://sports.cbsimg.net/images/mlb/logos/90x90/LAA.png	\N	\N
+8	Detroit Tigers	http://sports.cbsimg.net/images/mlb/logos/90x90/DET.png	\N	\N
+9	Baltimore Orioles	http://sports.cbsimg.net/images/mlb/logos/90x90/BAL.png	\N	\N
+10	San Francisco Giants	http://sports.cbsimg.net/images/mlb/logos/90x90/SF.png	\N	\N
+11	Boston Red Sox	http://sports.cbsimg.net/images/mlb/logos/90x90/BOS.png	\N	\N
+12	Kansas City Royals	http://sports.cbsimg.net/images/mlb/logos/90x90/KC.png	\N	\N
+13	Toronto Blue Jays	http://sports.cbsimg.net/images/mlb/logos/90x90/TOR.png	\N	\N
+14	Chicago Cubs	http://sports.cbsimg.net/images/mlb/logos/90x90/CHC.png	\N	\N
+15	Chicago White Sox	http://sports.cbsimg.net/images/mlb/logos/90x90/CHW.png	\N	\N
+16	San Diego Padres	http://sports.cbsimg.net/images/mlb/logos/90x90/SD.png	\N	\N
+17	New York Mets	http://sports.cbsimg.net/images/mlb/logos/90x90/NYM.png	\N	\N
+18	New York Yankees	http://sports.cbsimg.net/images/mlb/logos/90x90/NYY.png	\N	\N
+19	Miami Marlins	http://sports.cbsimg.net/images/mlb/logos/90x90/MIA.png	\N	\N
+20	Oakland Athletics	http://sports.cbsimg.net/images/mlb/logos/90x90/OAK.png	\N	\N
+21	Milwaukee Brewers	http://sports.cbsimg.net/images/mlb/logos/90x90/MIL.png	\N	\N
+22	Tampa Bay Rays	http://sports.cbsimg.net/images/mlb/logos/90x90/TB.png	\N	\N
+23	Cincinnati Reds	http://sports.cbsimg.net/images/mlb/logos/90x90/CIN.png	\N	\N
+24	Houston Astros	http://sports.cbsimg.net/images/mlb/logos/90x90/HOU.png	\N	\N
+25	Texas Rangers	http://sports.cbsimg.net/images/mlb/logos/90x90/TEX.png	\N	\N
+26	Minnesota Twins	http://sports.cbsimg.net/images/mlb/logos/90x90/MIN.png	\N	\N
+27	Colorado Rockies	http://sports.cbsimg.net/images/mlb/logos/90x90/COL.png	\N	\N
+28	Atlanta Braves	http://sports.cbsimg.net/images/mlb/logos/90x90/ATL.png	\N	\N
+29	Arizona Diamondbacks	http://sports.cbsimg.net/images/mlb/logos/90x90/ARI.png	\N	\N
+30	Philadelphia Phillies	http://sports.cbsimg.net/images/mlb/logos/90x90/PHI.png	\N	\N
+5	Cleveland Indians	http://sports.cbsimg.net/images/mlb/logos/90x90/CLE.png	\N	\N
+\.
+
+
+--
+-- Name: images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tcrosley
+--
+
+SELECT pg_catalog.setval('images_id_seq', 1, false);
+
+
+--
+-- Data for Name: publish_checkers; Type: TABLE DATA; Schema: public; Owner: tcrosley
+--
+
+COPY publish_checkers (id, website, publish_tok, week, year, created_at, updated_at) FROM stdin;
+29	USA	GARBAGE<span>(Published On: 2015-04-01)</span>	0	2015	2015-04-08 02:35:42.017303	2015-04-08 04:56:19.379828
+27	BI	GARBAGE<li class="date" data-bi-format="date" rel="1428085380">Apr.  3, 2015,  2:23 PM</li>	0	2015	2015-04-08 02:34:34.997636	2015-04-08 04:56:30.118944
+34	MLB	GARBAGE<p>Last updated Apr 7, 2015 10:30 pm ET</p>	0	2015	2015-04-08 02:41:07.981492	2015-04-08 04:56:37.983817
+33	Rant	GARBAGE<time class="updated" datetime="2014-12-13" pubdate=""> on December 13, 2014</time>	0	2015	2015-04-08 02:37:14.927046	2015-04-08 04:56:48.572875
+32	BR	GARBAGE<time class="article_timestamp" itemprop="datePublished" data-updated_at="1418391864">Dec 12, 2014</time>	0	2015	2015-04-08 02:36:45.58156	2015-04-08 04:56:57.295662
+31	CBS	GARBAGE<time itemprop="datePublished" pubdate="" datetime="2015-04-03T12:50:00Z">April 3, 2015  8:50 AM ET</time>	0	2015	2015-04-08 02:36:20.253452	2015-04-08 04:57:07.494818
+30	FOX	GARBAGE<span class="wisfb_pageInfoPrimaryText">2015 MLB Power Rankings:</span>	0	2015	2015-04-08 02:35:57.114338	2015-04-08 04:57:16.729946
+28	ESPN	GARBAGE<div class="date"><span>Updated:</span> April 6, 2015, 3:46 PM ET</div>	0	2015	2015-04-08 02:34:59.259801	2015-04-08 04:57:26.656017
+26	MLB	GARBAGE<p>Last updated Apr 7, 2015 9:33 pm ET</p>	0	2015	2015-04-08 02:34:17.006395	2015-04-08 04:57:38.415934
+44	ESPN	<div class="date"><span>Updated:</span> April 6, 2015, 3:46 PM ET</div>	1	2015	2015-04-08 04:58:01.273553	2015-04-08 04:58:01.273553
+45	USA	<span>(Published On: 2015-04-01)</span>	1	2015	2015-04-08 04:58:29.56267	2015-04-08 04:58:29.56267
+46	FOX	<span class="wisfb_pageInfoPrimaryText">2015 MLB Power Rankings:</span>	1	2015	2015-04-08 04:58:43.356944	2015-04-08 04:58:43.356944
+47	Rant	<time class="updated" datetime="2015-03-30" pubdate=""> on March 30, 2015</time>	1	2015	2015-04-08 04:59:07.792412	2015-04-08 04:59:07.792412
+48	BR	<time class="article_timestamp" itemprop="datePublished" data-updated_at="1428325083">Apr 6, 2015</time>	1	2015	2015-04-08 04:59:27.799304	2015-04-08 04:59:27.799304
+49	BI	<li class="date" data-bi-format="date" rel="1428085380">Apr.  3, 2015,  2:23 PM</li>	1	2015	2015-04-08 04:59:50.472918	2015-04-08 04:59:50.472918
+50	CBS	<time itemprop="datePublished" pubdate="" datetime="2015-04-03T12:50:00Z">April 3, 2015  8:50 AM ET</time>	1	2015	2015-04-08 05:00:08.516807	2015-04-08 05:00:08.516807
+51	MLB	<p>Last updated Apr 8, 2015 12:24 am ET</p>	1	2015	2015-04-08 05:00:26.920479	2015-04-08 05:00:26.920479
+\.
+
+
+--
+-- Name: publish_checkers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tcrosley
+--
+
+SELECT pg_catalog.setval('publish_checkers_id_seq', 51, true);
+
+
+--
+-- Data for Name: ranks; Type: TABLE DATA; Schema: public; Owner: tcrosley
+--
+
+COPY ranks (id, website, team, rank, week, year, description, article_link, published, created_at, updated_at) FROM stdin;
+967	ESPN	Washington Nationals	1	1	2015	Jayson Werth, Anthony Rendon and Denard Span all begin the season on the disabled list, but it should take more than that to knock the Nationals out as favorites, thanks to what should be a phenomenal rotation. -- <i>Harper Gordek (@harpergordek), <a hre	\N	\N	2015-04-08 04:58:02.339449	2015-04-08 04:58:02.339449
+968	ESPN	Los Angeles Dodgers	2	1	2015	The NL West is the Dodgers' division to lose. On other teams, a rookie CF replacing the likes of Matt Kemp or displacing Yasiel Puig might face pressure. For L.A., Joc Pederson should slide in nicely. Big question ... how good/healthy will the back of th	\N	\N	2015-04-08 04:58:02.728031	2015-04-08 04:58:02.728031
+969	ESPN	St. Louis Cardinals	3	1	2015	The defending National League Central champion Cardinals reloaded their lineup in the offseason by acquiring Jason Heyward, who is an upgrade in right field by as much as 7 WAR. He had a big game in Sunday's season opener against the Cubs, getting three 	\N	\N	2015-04-08 04:58:03.11317	2015-04-08 04:58:03.11317
+970	ESPN	Pittsburgh Pirates	4	1	2015	Andrew McCutchen may be the best player in the National League, but look for Starling Marte to have a big year. He changed his stance midseason last year, dropping his leg kick, and hit .354 over the final two months. -- <i>David Schoenfield (@dschoenfie	\N	\N	2015-04-08 04:58:03.521145	2015-04-08 04:58:03.521145
+971	ESPN	Seattle Mariners	5	1	2015	They have the second-longest playoff drought in the majors -- they last made the postseason in 2001 -- but optimism is high with Nelson Cruz providing much-needed right-handed power and Taijuan Walker having a dominant spring training. Plus, King Felix. 	\N	\N	2015-04-08 04:58:03.875735	2015-04-08 04:58:03.875735
+972	ESPN	Detroit Tigers	6	1	2015	Detroit's stranglehold on the AL Central was strongly challenged last year and likely will be again in 2015. The lineup still packs a punch and David Price is good enough to soften the blow of Max Scherzer's departure, but the Tigers badly need a bounce-	\N	\N	2015-04-08 04:58:04.269847	2015-04-08 04:58:04.269847
+973	ESPN	Los Angeles Angels	7	1	2015	The Angels are looking to keep the good times rolling into 2015, and the best way to do that is with a fast start. The team has struggled in April in recent seasons, finishing above .500 in only two of the last six years. They'll have to buck the trend i	\N	\N	2015-04-08 04:58:04.639072	2015-04-08 04:58:04.639072
+974	ESPN	Baltimore Orioles	8	1	2015	Matt Wieters and J.J. Hardy will both begin the season on the disabled list, while Chris Davis won't play in Monday's season opener as he serves the final game of a 25-game suspension handed down in September for using amphetamines without a prescription	\N	\N	2015-04-08 04:58:05.032629	2015-04-08 04:58:05.032629
+975	ESPN	Cleveland Indians	9	1	2015	The Indians did not make a big splash this offseason; with Gavin Floyd's injury, it means their only major addition was Brandon Moss. However, their strong core of young players has many fans excited about what 2015 could hold for the team. -- <i>Stephan	\N	\N	2015-04-08 04:58:05.449575	2015-04-08 04:58:05.449575
+976	ESPN	San Diego Padres	10	1	2015	The Padres made the most offseason noise around the majors, including acquiring Craig Kimbrel on Sunday. Will it all be enough to get them into the playoffs? Matt Kemp, Wil Myers and Justin Upton is an outfield with marquee status and offensive potential	\N	\N	2015-04-08 04:58:05.94699	2015-04-08 04:58:05.94699
+977	ESPN	Toronto Blue Jays	11	1	2015	Despite losing Marcus Stroman to injury, the Blue Jays are poised to compete for a playoff spot in a wide-open AL East. The Jays will have a brand-new, if somewhat unconventional, Opening Day roster. In addition to newcomers Josh Donaldson and Russell Ma	\N	\N	2015-04-08 04:58:06.442876	2015-04-08 04:58:06.442876
+978	ESPN	Boston Red Sox	12	1	2015	The best player on the retooled Red Sox may not be free agents Hanley Ramirez or Pablo Sandoval, or longtime veterans David Ortiz or Dustin Pedroia. It's Mookie Betts, who hit .429 in spring training after hitting .291 in his 52-game MLB trial last seaso	\N	\N	2015-04-08 04:58:07.596085	2015-04-08 04:58:07.596085
+979	ESPN	Chicago White Sox	13	1	2015	The new-look White Sox will be without ace Chris Sale for the first week of the season, so they'll need new arms Jeff Samardzija and David Robertson to come out with sharp command after getting bombed all spring (28 innings pitched, 26 earned runs, 11 ho	\N	\N	2015-04-08 04:58:08.180892	2015-04-08 04:58:08.180892
+980	ESPN	Miami Marlins	14	1	2015	The Marlins traded Andrew Heaney and Nate Eovaldi from their surplus of talented young pitchers, and incrementally improved their infield with the additions of Martin Prado and Dee Gordon. They'll count on Mat Latos, Jarred Cosart and Henderson Alvarez t	\N	\N	2015-04-08 04:58:09.087034	2015-04-08 04:58:09.087034
+981	ESPN	Kansas City Royals	15	1	2015	The defending American League champs don't seem to be getting much respect in the preseason predictions. Losing James Shields hurts and Kendrys Morales and Alex Rios were dubious free-agent signings. Once again, it will be relief pitching and defense car	\N	\N	2015-04-08 04:58:10.348549	2015-04-08 04:58:10.348549
+982	ESPN	San Francisco Giants	16	1	2015	An all-around horrible spring training by Giants' pitchers certainly didn't answer many questions about a rotation already marred with mystery. Coupling that with an Opening Day lineup without Hunter Pence or almost any power-hitting presence, things are	\N	\N	2015-04-08 04:58:11.487698	2015-04-08 04:58:11.487698
+983	ESPN	New York Mets	17	1	2015	The Mets led all teams in OPS (.817) and on base percentage (.349) during spring training, while finishing second in slugging percentage (.468) and third in home runs (39). Can the bats stay hot and club like that when the real games begin? If so, the Me	\N	\N	2015-04-08 04:58:12.487178	2015-04-08 04:58:12.487178
+984	ESPN	New York Yankees	18	1	2015	The Yankees open 2015 with a mountain of question marks, but one of the exclamation points has been the spring training performance of Michael Pineda. He finished spring training with 19 innings pitched, an ERA of 1.42 and a 23-1 strikeout-to-walk ratio.	\N	\N	2015-04-08 04:58:13.921624	2015-04-08 04:58:13.921624
+985	ESPN	Oakland Athletics	19	1	2015	Oakland opens the year down two outfielders, as Coco Crisp and Josh Reddick will both be on the disabled list on Opening Day. Reddick is due back soon, and manager Bob Melvin is nothing if not adept at mixing and matching his roster to cover holes. -- <i	\N	\N	2015-04-08 04:58:15.244976	2015-04-08 04:58:15.244976
+986	ESPN	Chicago Cubs	20	1	2015	Many are predicting the Cubs to not only make the playoffs in 2015, but to win the World Series. Reality is that the team is probably one year away from being a legitimate World Series contender. -- <i>Joe Aiello (@VFTB), <a href="www.viewfromthebleacher	\N	\N	2015-04-08 04:58:16.412859	2015-04-08 04:58:16.412859
+987	ESPN	Milwaukee Brewers	21	1	2015	The Brewers are hoping their 150-plus days in first place in the NL Central last year is more of an indicator of their quality than the ugly September collapse. Whether they can keep up in an increasingly difficult division comes down to the lineup regai	\N	\N	2015-04-08 04:58:17.34039	2015-04-08 04:58:17.34039
+988	ESPN	Cincinnati Reds	22	1	2015	Will this be Johnny Cueto's last Opening Day as a Red? Can everyone stay healthy? If not, can the Reds compete? They have a ton of question marks, and GM Walt Jocketty didn't appear to answer many of them in the offseason. But hope always springs eternal	\N	\N	2015-04-08 04:58:18.316745	2015-04-08 04:58:18.316745
+989	ESPN	Houston Astros	23	1	2015	The Astros are going to strike out a gazillion times but George Springer, Chris Carter and Evan Gattis will mash a lot of home runs behind 2014 batting champ Jose Altuve. If the back of the rotation comes through, the Astros could have their first winnin	\N	\N	2015-04-08 04:58:19.338416	2015-04-08 04:58:19.338416
+990	ESPN	Tampa Bay Rays	24	1	2015	The Kevin Cash era begins in Tampa as the Rays begin the season with several of their starting pitchers on the disabled list. -- <i>ESPN.com</i>	\N	\N	2015-04-08 04:58:20.523131	2015-04-08 04:58:20.523131
+991	ESPN	Texas Rangers	25	1	2015	Yu Darvish is out for the season, but Prince Fielder and Shin-Soo Choo will look to show what they can do when healthy. Many already have written off the Rangers, but they just might be better than some people believe. -- <i>Brandon Land (@one_strike_awa	\N	\N	2015-04-08 04:58:21.468051	2015-04-08 04:58:21.468051
+992	ESPN	Minnesota Twins	26	1	2015	Can the Twins climb out of last place this season with the AL Central improving around them? The way their pitching staff fares during trips to Detroit and Chicago in the opening week should provide an early hint. -- <i>Nick Nelson (@nnelson9), <a href="	\N	\N	2015-04-08 04:58:22.463558	2015-04-08 04:58:22.463558
+993	ESPN	Atlanta Braves	27	1	2015	With just seven players on the Opening Day roster who were on last year's season-opening roster, the Braves will put a very different team on the field in 2015. Gone are the power-hitting Justin Upton, Jason Heyward and Evan Gattis, replaced by a hodgepo	\N	\N	2015-04-08 04:58:23.364153	2015-04-08 04:58:23.364153
+994	ESPN	Colorado Rockies	28	1	2015	The biggest "change" the Rockies made in the offseason was the promotion of an internal candidate to general manager. As spring training injuries riddled the starting rotation, releases and demotions suggest the biggest change might be toward accountabil	\N	\N	2015-04-08 04:58:24.646595	2015-04-08 04:58:24.646595
+995	ESPN	Arizona Diamondbacks	29	1	2015	The D-backs surprised most fans when they traded Trevor Cahill to the Braves and added Archie Bradley to the rotation. They followed that up by benching Aaron Hill in favor of starting shortstop Nick Ahmed, sliding Chris Owings to second base. Yasmany To	\N	\N	2015-04-08 04:58:25.50403	2015-04-08 04:58:25.50403
+996	ESPN	Philadelphia Phillies	30	1	2015	The Phillies' season-opening rotation will include Aaron Harang, Jerome Williams and Sean O'Sullivan. The starting center fielder played second base in Double-A last season. Enjoy these last few months of Cole Hamels, Phillies fans. -- <i>David Schoenfie	\N	\N	2015-04-08 04:58:26.32241	2015-04-08 04:58:26.32241
+997	USA	Washington Nationals	1	1	2015	The team that led the National League in ERA just added Max Scherzer to the rotation. Tanner Roarke was sent to the bullpen.	\N	\N	2015-04-08 04:58:31.041266	2015-04-08 04:58:31.041266
+998	USA	Los Angeles Dodgers	2	1	2015	The defense improves with second baseman Howie Kendrick and shortstop Jimmy Rollins up the middle.	\N	\N	2015-04-08 04:58:31.379373	2015-04-08 04:58:31.379373
+999	USA	St. Louis Cardinals	3	1	2015	Jason Heyward mans right field after the sudden death of Oscar Taveras.	\N	\N	2015-04-08 04:58:31.71167	2015-04-08 04:58:31.71167
+1000	USA	Los Angeles Angels	4	1	2015	Slugger Josh Hamilton and his huge contract face an uncertain future.	\N	\N	2015-04-08 04:58:32.025001	2015-04-08 04:58:32.025001
+1001	USA	Seattle Mariners	5	1	2015	Offense improves with 2014 home run champion Nelson Cruz in the mix.	\N	\N	2015-04-08 04:58:32.299947	2015-04-08 04:58:32.299947
+1002	USA	Pittsburgh Pirates	6	1	2015	How will infielder Jung Ho Kangs 40 home runs hit in 2014 in South Korea translate to the majors?	\N	\N	2015-04-08 04:58:32.57387	2015-04-08 04:58:32.57387
+1003	USA	Detroit Tigers	7	1	2015	Questions abound with the losses of Scherzer and Rick Porcello.	\N	\N	2015-04-08 04:58:32.842049	2015-04-08 04:58:32.842049
+1004	USA	San Francisco Giants	8	1	2015	The defending World Series champions hope the rotation stays healthy.	\N	\N	2015-04-08 04:58:33.092743	2015-04-08 04:58:33.092743
+1005	USA	Cleveland Indians	9	1	2015	Theres playoff potential despite a competitive division.	\N	\N	2015-04-08 04:58:33.384724	2015-04-08 04:58:33.384724
+1006	USA	Chicago White Sox	10	1	2015	The acquisitions of Melky Cabrera, Adam LaRoche, David Robertson and Jeff Samardzija bring hope.	\N	\N	2015-04-08 04:58:33.641951	2015-04-08 04:58:33.641951
+1007	USA	Boston Red Sox	11	1	2015	Worst-to-first-to-worst-to-first? Pablo Sandoval and Hanley Ramirez, the new acquisitions, hope so.	\N	\N	2015-04-08 04:58:33.903899	2015-04-08 04:58:33.903899
+1008	USA	Kansas City Royals	12	1	2015	Staff ace James Shields is out, but the American League champions are set to defend their title.	\N	\N	2015-04-08 04:58:34.164755	2015-04-08 04:58:34.164755
+1009	USA	Toronto Blue Jays	13	1	2015	Catcher Russell Martin and third baseman Josh Donaldson beef up the lineup offensively and defensively.	\N	\N	2015-04-08 04:58:34.457012	2015-04-08 04:58:34.457012
+1010	USA	San Diego Padres	14	1	2015	New general manager A.J. Preller remodeled the organization and the outfield with Justin Upton, Matt Kemp and Wil Myers.	\N	\N	2015-04-08 04:58:34.726018	2015-04-08 04:58:34.726018
+1011	USA	Baltimore Orioles	15	1	2015	The club loses offense with Cruz and Nick Markakis gone, but it did get Travis Snider.	\N	\N	2015-04-08 04:58:35.016685	2015-04-08 04:58:35.016685
+1012	USA	Oakland Athletics	16	1	2015	Will general manager Billy Beanes offseason madness pan out?	\N	\N	2015-04-08 04:58:35.324732	2015-04-08 04:58:35.324732
+1013	USA	Miami Marlins	16	1	2015	We can count $325 million reasons why the Marlins will contend.	\N	\N	2015-04-08 04:58:35.594127	2015-04-08 04:58:35.594127
+1014	USA	Chicago Cubs	18	1	2015	Starting pitcher Jon Lester, manager Joe Maddon and youth make the team relevant again.	\N	\N	2015-04-08 04:58:35.882311	2015-04-08 04:58:35.882311
+1015	USA	Tampa Bay Rays	19	1	2015	How will the Rays do under new management?	\N	\N	2015-04-08 04:58:36.139088	2015-04-08 04:58:36.139088
+1016	USA	New York Yankees	20	1	2015	Let the A-Rod drama begin. More important, will the starting rotation hold up?	\N	\N	2015-04-08 04:58:36.428383	2015-04-08 04:58:36.428383
+1017	USA	New York Mets	21	1	2015	The pitching staff is solid, but the shortstop position wasnt addressed in the offseason.	\N	\N	2015-04-08 04:58:36.684949	2015-04-08 04:58:36.684949
+1018	USA	Cincinnati Reds	22	1	2015	Can the rotation survive the losses of Mat Latos and Alfredo Simon?	\N	\N	2015-04-08 04:58:36.948773	2015-04-08 04:58:36.948773
+1019	USA	Milwaukee Brewers	23	1	2015	Will the 2014 collapse down the stretch, which cost them a playoff berth, carry over?	\N	\N	2015-04-08 04:58:37.228219	2015-04-08 04:58:37.228219
+1020	USA	Texas Rangers	24	1	2015	The loss of starting pitcher Yu Darvish to Tommy John elbow surgery is a major hurdle.	\N	\N	2015-04-08 04:58:37.477909	2015-04-08 04:58:37.477909
+1021	USA	Atlanta Braves	25	1	2015	President of baseball operations John Hart is building for 2017.	\N	\N	2015-04-08 04:58:37.726069	2015-04-08 04:58:37.726069
+1022	USA	Houston Astros	26	1	2015	A.J. Hinch, 40, gets his second crack at managing.	\N	\N	2015-04-08 04:58:38.000179	2015-04-08 04:58:38.000179
+1023	USA	Minnesota Twins	27	1	2015	A familiar face to manage the team Hall of Famer Paul Molitor.	\N	\N	2015-04-08 04:58:38.296487	2015-04-08 04:58:38.296487
+1024	USA	Philadelphia Phillies	28	1	2015	HHow long do starting pitchers Cole Hamels and Cliff Lee and closer Jonathan Papelbon stick around?	\N	\N	2015-04-08 04:58:38.55719	2015-04-08 04:58:38.55719
+1025	USA	Colorado Rockies	29	1	2015	Troy Tulowitzki and Carlos Gonzalez survive the offseason, but will they survive the trade deadline?	\N	\N	2015-04-08 04:58:38.816223	2015-04-08 04:58:38.816223
+1026	USA	Arizona Diamondbacks	29	1	2015	Tony La Russa and Dave Stewart are in rebuild mode.	\N	\N	2015-04-08 04:58:39.090155	2015-04-08 04:58:39.090155
+1027	FOX	Los Angeles Dodgers	1	1	2015	89.8% ... It’s just as well that Clayton Kershaw suffered his meltdown in the top half of the seventh inning in Game 1 of the NLDS in October, as Dodgers fans are used to heading for the exits around then anyway. The Dodgers new regime is hoping that a r	\N	\N	2015-04-08 04:58:44.975081	2015-04-08 04:58:44.975081
+1028	FOX	Washington Nationals	2	1	2015	78.3% ... The Nationals generated a ton of trade rumors this offseason after signing Max Scherzer to an already crowded rotation. With none of those trades coming to fruition, we’re left to assume that Mike Rizzo brought in Scherzer to show Stephen Stras	\N	\N	2015-04-08 04:58:45.897325	2015-04-08 04:58:45.897325
+1029	FOX	Los Angeles Angels	3	1	2015	67.6% ... While the Angels acquired Matt Joyce as a platoon partner at DH, Josh Hamilton’s absence likely means a full slate of at-bats for the left-hander, at least in the early going. Of course expecting Joyce to hit southpaws is akin to expecting Gran	\N	\N	2015-04-08 04:58:46.843951	2015-04-08 04:58:46.843951
+1030	FOX	St. Louis Cardinals	4	1	2015	61.7% ... Known for drafting and developing players who grind a la Joey Knish, the Cardinals’ trade for Jason Heyward proved that they know that while you can’t lose what you don’t put in the middle, you can’t win either. In doing so, the Cardinals showe	\N	\N	2015-04-08 04:58:47.719938	2015-04-08 04:58:47.719938
+1031	FOX	Boston Red Sox	5	1	2015	56.4% ... If the Red Sox offense really clicks, they could easily lead the league in runs scored thanks to the additions of Hanley Ramirez and Pablo Sandoval. If the Red Sox pitching staff really clicks, they probably traded for Cole Hamels.	\N	\N	2015-04-08 04:58:48.472117	2015-04-08 04:58:48.472117
+1032	FOX	Seattle Mariners	6	1	2015		\N	\N	2015-04-08 04:58:49.152608	2015-04-08 04:58:49.152608
+1033	FOX	Tampa Bay Rays	7	1	2015	52.5% ... The Rays might well be the Red Sox inverse, with a rotation full of ceiling and depth and a lineup that could, with the help of your 39 cents per day, score a run this week. How the org responds to the loss of three mainstays (Andrew Friedman, 	\N	\N	2015-04-08 04:58:49.808255	2015-04-08 04:58:49.808255
+1034	FOX	Detroit Tigers	8	1	2015	48.7% ... The Tigers, and Detroit in general, might never rebuild in earnest, but failing to pursue Max Scherzer to the fullest extent of their budget could mean that GM Dave Dombrowski realizes it might be time for a soft reset in the next few years. It	\N	\N	2015-04-08 04:58:50.341905	2015-04-08 04:58:50.341905
+1035	FOX	Cleveland Indians	9	1	2015	43.0% ... Hopes are high in Cleveland, and for good reason. The Tribe feature a deep lineup, a rotation full of upside, and a veritable cadre of hard-throwing bullpen arms. Which only makes us wonder how Skip Bayless will blame their inevitable choke-job	\N	\N	2015-04-08 04:58:50.988372	2015-04-08 04:58:50.988372
+1036	FOX	Chicago Cubs	10	1	2015	38.7% ... Cubs fans will laugh at themselves for their faith in Brett Jackson, Josh Vitters, and Trey McNutt and breathlessly praise Kris Bryant, Addison Russell and Jorge Soler at the same time. The lesson as always? Don’t talk to Cubs fans.	\N	\N	2015-04-08 04:58:51.800406	2015-04-08 04:58:51.800406
+1037	FOX	San Diego Padres	11	1	2015	37.0% ... New GM A.J. Preller’s aggressive reconstruction of the Padres roster registered a nine on the Douglas Sea Scale. Of course it was merely a second degree swell in San Diego.	\N	\N	2015-04-08 04:58:52.632298	2015-04-08 04:58:52.632298
+1038	FOX	New York Mets	12	1	2015	36.8% ... Since trading Jose Reyes prior to the 2012 season, Sandy Alderson has been looking for a starting shortstop. He’s still 37 years ahead of Moses, and people Iove that guy.	\N	\N	2015-04-08 04:58:52.999268	2015-04-08 04:58:52.999268
+1039	FOX	Oakland Athletics	13	1	2015	36.8% ... The gambit that Billy Beane played this offseason was one he’s played before: get younger, cheaper, and deeper, while still remaining competitive. By the same token, he’s taken the team from a 99.3 percent chance of making the playoffs on Sept.	\N	\N	2015-04-08 04:58:53.367791	2015-04-08 04:58:53.367791
+1040	FOX	San Francisco Giants	14	1	2015	34.7% ... They’re probably the second-best team in the division, and despite their three championships in five seasons, there’s as much downside here as ever. The Giants still have Buster Posey though, who, like a British accent, can cover for a multitud	\N	\N	2015-04-08 04:58:53.724849	2015-04-08 04:58:53.724849
+1041	FOX	Miami Marlins	15	1	2015	29.8% ... The Marlins actually have a competitive team, which raises the question as to when they’ll trade their core to the Blue Jays.	\N	\N	2015-04-08 04:58:54.052978	2015-04-08 04:58:54.052978
+1042	FOX	Toronto Blue Jays	16	1	2015	28.0% ... Active as ever in the offseason, the Jays still managed to enter Spring Training featuring a depth chart that idolized Flat Stanley.	\N	\N	2015-04-08 04:58:54.391103	2015-04-08 04:58:54.391103
+1043	FOX	Pittsburgh Pirates	17	1	2015	27.5% ... The Pirates’ offseason centered on re-signing a 38-year-old pitcher who most people forgot left in the first place.	\N	\N	2015-04-08 04:58:54.746387	2015-04-08 04:58:54.746387
+1044	FOX	Milwaukee Brewers	18	1	2015	26.9% ... The Brewers are unlikely to find the same success in plastering their major offseason acquisition of 2015 (Adam Lind) on t-shirts and posters as they had last offseason (Hank the Dog).	\N	\N	2015-04-08 04:58:55.104079	2015-04-08 04:58:55.104079
+1045	FOX	Chicago White Sox	19	1	2015	26.7% ... The White Sox overhauled the majority of their bullpen and lineup via free agency and trades. They now only need to address their deficiencies at the hot corner, keystone, catcher and the back end of their rotation.	\N	\N	2015-04-08 04:58:55.558999	2015-04-08 04:58:55.558999
+1046	FOX	New York Yankees	20	1	2015	22.7% ... The Yankees continue to show remarkable restraint at perhaps the worst times, missing out on Robinson Cano last year while still going over the luxury tax, and then following up by failing to address their leaky rotation outside of adding Natha	\N	\N	2015-04-08 04:58:55.891767	2015-04-08 04:58:55.891767
+1047	FOX	Baltimore Orioles	21	1	2015	19.8% ... You’ll forgive the Orioles’ unwillingness to retain the reigning home run champion upon learning that they were in a high-stakes staring contest with the dead goldfish that is the Mariners from November-January. The O’s didn’t win, but they did	\N	\N	2015-04-08 04:58:56.255299	2015-04-08 04:58:56.255299
+1048	FOX	Texas Rangers	22	1	2015	16.8% ... I was trying to think of a comment for the Rangers but every time I thought I had something it fell apar- oh I found it.	\N	\N	2015-04-08 04:58:56.591206	2015-04-08 04:58:56.591206
+1049	FOX	Houston Astros	23	1	2015	13.6% ... If you truly buy that the emergence of Dallas Keuchel and Collin McHugh were part of a “process,” we have a t-shirt to sell you. Where will Evan Gattis play? How will Mark Appel enrage his teammates? Will Astros hitters break the strikeout reco	\N	\N	2015-04-08 04:58:56.916312	2015-04-08 04:58:56.916312
+1050	FOX	Cincinnati Reds	24	1	2015	13.1% ... With a run differential of -17, the 76-86 record Cincinnati compiled last year can be chalked up, at least in part, to some bad luck. After dealing away two-fifths of their starting rotation, though, they’re more likely to earn last year’s reco	\N	\N	2015-04-08 04:58:57.280996	2015-04-08 04:58:57.280996
+1051	FOX	Kansas City Royals	25	1	2015	10.2% ... The Death Star and the 2014 Royals have a lot in common: they took a long time to build, they functioned under unconventional management and their Shields failed at inopportune times. If Edinson Volquez and Chris Young don’t produce, the 2015 R	\N	\N	2015-04-08 04:58:57.662382	2015-04-08 04:58:57.662382
+1052	FOX	Atlanta Braves	26	1	2015	8.2% ... The Braves underwent a stark transformation this winter, hoping to stockpile talent in the minors and build for the future. Some may consider it intelligent, but the Braves also signed someone who needed neck surgery to a four-year deal and one 	\N	\N	2015-04-08 04:58:58.007364	2015-04-08 04:58:58.007364
+1053	FOX	Minnesota Twins	27	1	2015	7.6% ... The Twins shouldn’t be expected to be competitive this season, but what can be expected is for fans to blame whatever goes wrong on Joe Mauer’s lack of leadership and RBI.	\N	\N	2015-04-08 04:58:58.341709	2015-04-08 04:58:58.341709
+1054	FOX	Arizona Diamondbacks	28	1	2015	6.9% ... The Diamondbacks remade their rotation over the winter in the same way Domino’s reinvented pasta. Their current and former GMs are living together, but yeah, Justin Upton was the problem.	\N	\N	2015-04-08 04:58:58.686599	2015-04-08 04:58:58.686599
+1055	FOX	Colorado Rockies	29	1	2015	4.3% ... Jeff Bridich’s first offseason as GM was a quiet one, though he netted an extra first-round pick thanks to making a Qualifying Offer to Michael Cuddyer. Whether that lack of activity was a good decision will play out in real time, but it’s hard 	\N	\N	2015-04-08 04:58:59.003615	2015-04-08 04:58:59.003615
+1056	FOX	Philadelphia Phillies	30	1	2015	2.1% ... Maikel Franco is probably their best option at first base, but don’t get too mad at Ryne Sandberg for overlooking him: You literally can't see Franco standing behind Ryan Howard. That might have been a cheap shot, but at least we went a whole se	\N	\N	2015-04-08 04:58:59.357223	2015-04-08 04:58:59.357223
+1057	Rant	Philadelphia Phillies	30	1	2015	30. Philadelphia Phillies	\N	\N	2015-04-08 04:59:09.130779	2015-04-08 04:59:09.130779
+1058	Rant	Texas Rangers	29	1	2015	29. Texas Rangers	\N	\N	2015-04-08 04:59:09.585693	2015-04-08 04:59:09.585693
+1059	Rant	Tampa Bay Rays	28	1	2015	28. Tampa Bay Rays	\N	\N	2015-04-08 04:59:10.045344	2015-04-08 04:59:10.045344
+1060	Rant	Colorado Rockies	27	1	2015	27. Colorado Rockies	\N	\N	2015-04-08 04:59:10.505209	2015-04-08 04:59:10.505209
+1061	Rant	Minnesota Twins	26	1	2015	26. Minnesota Twins	\N	\N	2015-04-08 04:59:10.946701	2015-04-08 04:59:10.946701
+1062	Rant	Arizona Diamondbacks	25	1	2015	25. Arizona Diamondbacks	\N	\N	2015-04-08 04:59:11.380739	2015-04-08 04:59:11.380739
+1063	Rant	Houston Astros	24	1	2015	24. Houston Astros	\N	\N	2015-04-08 04:59:12.008346	2015-04-08 04:59:12.008346
+1064	Rant	Cincinnati Reds	23	1	2015	23. Cincinnati Reds	\N	\N	2015-04-08 04:59:12.347419	2015-04-08 04:59:12.347419
+1065	Rant	Atlanta Braves	22	1	2015	22. Atlanta Braves	\N	\N	2015-04-08 04:59:12.688601	2015-04-08 04:59:12.688601
+1066	Rant	New York Mets	21	1	2015	21. New York Mets	\N	\N	2015-04-08 04:59:13.028395	2015-04-08 04:59:13.028395
+1067	Rant	Milwaukee Brewers	20	1	2015	20. Milwaukee Brewers	\N	\N	2015-04-08 04:59:13.388511	2015-04-08 04:59:13.388511
+1068	Rant	Cleveland Indians	19	1	2015	19. Cleveland Indians	\N	\N	2015-04-08 04:59:13.734691	2015-04-08 04:59:13.734691
+1069	Rant	New York Yankees	18	1	2015	18. New York Yankees	\N	\N	2015-04-08 04:59:14.053097	2015-04-08 04:59:14.053097
+1070	Rant	Kansas City Royals	17	1	2015	17. Kansas City Royals	\N	\N	2015-04-08 04:59:14.414836	2015-04-08 04:59:14.414836
+1071	Rant	Baltimore Orioles	16	1	2015	16. Baltimore Orioles	\N	\N	2015-04-08 04:59:14.751782	2015-04-08 04:59:14.751782
+1072	Rant	Oakland Athletics	15	1	2015	15. Oakland Athletics	\N	\N	2015-04-08 04:59:15.083487	2015-04-08 04:59:15.083487
+1073	Rant	Miami Marlins	14	1	2015	14. Miami Marlins	\N	\N	2015-04-08 04:59:15.448622	2015-04-08 04:59:15.448622
+1074	Rant	Chicago White Sox	13	1	2015	13. Chicago White Sox	\N	\N	2015-04-08 04:59:15.819593	2015-04-08 04:59:15.819593
+1075	Rant	Chicago Cubs	12	1	2015	12. Chicago Cubs	\N	\N	2015-04-08 04:59:16.160585	2015-04-08 04:59:16.160585
+1076	Rant	Boston Red Sox	11	1	2015	11. Boston Red Sox	\N	\N	2015-04-08 04:59:16.488498	2015-04-08 04:59:16.488498
+1077	Rant	San Diego Padres	10	1	2015	10. San Diego Padres	\N	\N	2015-04-08 04:59:16.820065	2015-04-08 04:59:16.820065
+1078	Rant	Detroit Tigers	9	1	2015	9. Detroit Tigers	\N	\N	2015-04-08 04:59:17.155756	2015-04-08 04:59:17.155756
+1079	Rant	Toronto Blue Jays	8	1	2015	8. Toronto Blue Jays	\N	\N	2015-04-08 04:59:17.517929	2015-04-08 04:59:17.517929
+1080	Rant	San Francisco Giants	7	1	2015	7. San Francisco Giants	\N	\N	2015-04-08 04:59:17.864349	2015-04-08 04:59:17.864349
+1081	Rant	Los Angeles Angels	6	1	2015	6. Los Angeles Angels	\N	\N	2015-04-08 04:59:18.20769	2015-04-08 04:59:18.20769
+1082	Rant	St. Louis Cardinals	5	1	2015	5. St. Louis Cardinals	\N	\N	2015-04-08 04:59:18.553341	2015-04-08 04:59:18.553341
+1083	Rant	Pittsburgh Pirates	4	1	2015	4. Pittsburgh Pirates	\N	\N	2015-04-08 04:59:18.864665	2015-04-08 04:59:18.864665
+1084	Rant	Seattle Mariners	3	1	2015	3. Seattle Mariners	\N	\N	2015-04-08 04:59:19.235438	2015-04-08 04:59:19.235438
+1085	Rant	Los Angeles Dodgers	2	1	2015	2. Los Angeles Dodgers	\N	\N	2015-04-08 04:59:19.608903	2015-04-08 04:59:19.608903
+1086	Rant	Washington Nationals	1	1	2015	1. Washington Nationals	\N	\N	2015-04-08 04:59:19.934083	2015-04-08 04:59:19.934083
+1087	BR	Philadelphia Phillies	30	1	2015	The 2015 <a href="http://bleacherreport.com/mlb">MLB</a> season is officially underway, as the St. Louis Cardinals bested the Chicago Cubs 3-0 on&nbsp;<em>Sunday Night Baseball</em>, and the rest of the league's teams are now set for their respective deb	\N	\N	2015-04-08 04:59:29.16806	2015-04-08 04:59:29.16806
+1088	BR	Colorado Rockies	29	1	2015	<strong>What to Watch for Opening Week</strong>The Philadelphia Phillies kick things off against a pair of teams with lofty expectations for the upcoming year and plenty of hype in the Boston Red Sox and Washington Nationals, with both series coming at h	\N	\N	2015-04-08 04:59:29.806123	2015-04-08 04:59:29.806123
+1089	BR	Minnesota Twins	28	1	2015	<strong><strong>What to Watch for Opening Week</strong></strong>Aside from the underwhelming Opening Day pitching matchup of Kyle Kendrick and Kyle Lohse to begin their series against the Milwaukee Brewers, the Colorado Rockies will also square off again	\N	\N	2015-04-08 04:59:30.440801	2015-04-08 04:59:30.440801
+1090	BR	Arizona Diamondbacks	27	1	2015	<strong><strong>What to Watch for Opening Week</strong></strong>The Minnesota Twins begin the season exclusively in-division, as they play the Detroit Tigers and Chicago White Sox on the road the first week and follow that up with series against the Kans	\N	\N	2015-04-08 04:59:30.99194	2015-04-08 04:59:30.99194
+1091	BR	Atlanta Braves	26	1	2015	<strong><strong>What to Watch for Opening Week</strong></strong>The Arizona Diamondbacks will get to stay in sunny Arizona to open the 2015 season, taking on a pair of divisional opponents in the San Francisco Giants and Los Angeles Dodgers at home.There	\N	\N	2015-04-08 04:59:31.441366	2015-04-08 04:59:31.441366
+1092	BR	Tampa Bay Rays	25	1	2015	<strong><strong><strong>What to Watch for Opening Week</strong></strong></strong>The Atlanta Braves will also be facing off against their own division to start the year with series against the Miami Marlins, New York Mets and then the Marlins again right	\N	\N	2015-04-08 04:59:31.889611	2015-04-08 04:59:31.889611
+1093	BR	Texas Rangers	24	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>With right-hander Chris Archer taking the ball, the Tampa Bay Rays square off with the reigning AL East champion Baltimore Orioles on Opening Day. That's fo	\N	\N	2015-04-08 04:59:32.403969	2015-04-08 04:59:32.403969
+1094	BR	Houston Astros	23	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>A four-game series with the Oakland Athletics will launch the 2015 campaign for the Texas Rangers, followed by one series each against the remaining three A	\N	\N	2015-04-08 04:59:33.159747	2015-04-08 04:59:33.159747
+1095	BR	Milwaukee Brewers	22	1	2015	<strong><strong><strong>What to Watch for Opening Week</strong></strong></strong>The Houston Astros will get their 2015 season started against the Cleveland Indians before kicking off a 15-game stretch of games against fellow AL West teams with a three-g	\N	\N	2015-04-08 04:59:34.001109	2015-04-08 04:59:34.001109
+1096	BR	Cincinnati Reds	21	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>The Milwaukee Brewers jumped out to a 20-7 start last season, and their first steps in getting off to a similar start this year will be a pair of home serie	\N	\N	2015-04-08 04:59:34.374031	2015-04-08 04:59:34.374031
+1097	BR	San Francisco Giants	20	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>The Cincinnati Reds will have a chance to show exactly where they stand in the NL Central right off the bat, as their first 22 games are all against divisio	\N	\N	2015-04-08 04:59:34.754725	2015-04-08 04:59:34.754725
+637	MLB	Washington Nationals	1	0	2015	90	\N	\N	2015-04-08 02:34:17.427831	2015-04-08 02:34:17.427831
+638	MLB	Los Angeles Dodgers	2	0	2015	87	\N	\N	2015-04-08 02:34:17.598757	2015-04-08 02:34:17.598757
+639	MLB	Seattle Mariners	3	0	2015	84	\N	\N	2015-04-08 02:34:17.791638	2015-04-08 02:34:17.791638
+640	MLB	St. Louis Cardinals	4	0	2015	81	\N	\N	2015-04-08 02:34:17.980748	2015-04-08 02:34:17.980748
+641	MLB	Pittsburgh Pirates	5	0	2015	78	\N	\N	2015-04-08 02:34:18.167672	2015-04-08 02:34:18.167672
+642	MLB	Los Angeles Angels	6	0	2015	75	\N	\N	2015-04-08 02:34:18.348936	2015-04-08 02:34:18.348936
+643	MLB	Detroit Tigers	7	0	2015	72	\N	\N	2015-04-08 02:34:18.540638	2015-04-08 02:34:18.540638
+644	MLB	Cleveland Indians	8	0	2015	69	\N	\N	2015-04-08 02:34:18.714976	2015-04-08 02:34:18.714976
+645	MLB	Boston Red Sox	9	0	2015	66	\N	\N	2015-04-08 02:34:18.934591	2015-04-08 02:34:18.934591
+646	MLB	Baltimore Orioles	10	0	2015	63	\N	\N	2015-04-08 02:34:19.108069	2015-04-08 02:34:19.108069
+647	MLB	San Diego Padres	11	0	2015	60	\N	\N	2015-04-08 02:34:19.286984	2015-04-08 02:34:19.286984
+648	MLB	Miami Marlins	12	0	2015	57	\N	\N	2015-04-08 02:34:19.459924	2015-04-08 02:34:19.459924
+649	MLB	Toronto Blue Jays	13	0	2015	54	\N	\N	2015-04-08 02:34:19.633623	2015-04-08 02:34:19.633623
+650	MLB	Chicago White Sox	14	0	2015	51	\N	\N	2015-04-08 02:34:19.832303	2015-04-08 02:34:19.832303
+651	MLB	Oakland Athletics	15	0	2015	48	\N	\N	2015-04-08 02:34:20.001297	2015-04-08 02:34:20.001297
+652	MLB	New York Mets	16	0	2015	45	\N	\N	2015-04-08 02:34:20.183997	2015-04-08 02:34:20.183997
+653	MLB	New York Yankees	17	0	2015	42	\N	\N	2015-04-08 02:34:20.347434	2015-04-08 02:34:20.347434
+654	MLB	San Francisco Giants	18	0	2015	39	\N	\N	2015-04-08 02:34:20.524833	2015-04-08 02:34:20.524833
+655	MLB	Kansas City Royals	19	0	2015	36	\N	\N	2015-04-08 02:34:20.695313	2015-04-08 02:34:20.695313
+656	MLB	Chicago Cubs	20	0	2015	33	\N	\N	2015-04-08 02:34:20.876306	2015-04-08 02:34:20.876306
+1098	BR	New York Yankees	19	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>The San Francisco Giants begin their latest title defense on the road with series against the Arizona Diamondbacks and San Diego Padres before squaring off 	\N	\N	2015-04-08 04:59:35.095286	2015-04-08 04:59:35.095286
+1099	BR	Kansas City Royals	18	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>The New York Yankees begin the year with some stark contrast, as their veteran roster squares off against a Toronto Blue Jays team that enters the year with	\N	\N	2015-04-08 04:59:35.441985	2015-04-08 04:59:35.441985
+1100	BR	Oakland Athletics	17	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>An uphill battle lies ahead for the Kansas City Royals as they look to defend their AL pennant, and that will all start with a series at home against the Ch	\N	\N	2015-04-08 04:59:35.787784	2015-04-08 04:59:35.787784
+1101	BR	Chicago White Sox	16	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>The Oakland Athletics will welcome to town the Texas Rangers and Seattle Mariners for the first week of action this season, as A's fans will have a chance t	\N	\N	2015-04-08 04:59:36.130389	2015-04-08 04:59:36.130389
+1102	BR	New York Mets	15	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>Being without ace Chris Sale to open the season knocks the Chicago White Sox down a few spots for the time being, though this week's opponents in the Kansas	\N	\N	2015-04-08 04:59:36.571475	2015-04-08 04:59:36.571475
+1103	BR	Baltimore Orioles	14	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>There is no shortage of storylines for the first week of the season, but the return of Matt Harvey in a matchup against Stephen Strasburg and the Washington	\N	\N	2015-04-08 04:59:37.076655	2015-04-08 04:59:37.076655
+1104	BR	Chicago Cubs	13	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>The Baltimore Orioles are another team that will be bombarded with division opponents to begin the season, as their first 19 games are against fellow AL Eas	\N	\N	2015-04-08 04:59:37.439636	2015-04-08 04:59:37.439636
+1105	BR	Toronto Blue Jays	12	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>It's safe to say things did not go exactly as hoped for the Chicago Cubs on Sunday night, as they managed just five hits in a shutout at the hands of the St	\N	\N	2015-04-08 04:59:37.792851	2015-04-08 04:59:37.792851
+1106	BR	Miami Marlins	11	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>The Toronto Blue Jays will take to the road to begin their 2015 slate, matching up with the New York Yankees and Baltimore Orioles in a pair of AL East clas	\N	\N	2015-04-08 04:59:38.12348	2015-04-08 04:59:38.12348
+1107	BR	Cleveland Indians	10	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>The Miami Marlins have a great chance to get off to a hot start, as they face the Atlanta Braves, Tampa Bay Rays and then the Braves again to begin the year	\N	\N	2015-04-08 04:59:38.611131	2015-04-08 04:59:38.611131
+1108	BR	Detroit Tigers	9	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>The Cleveland Indians and reigning AL Cy Young winner Corey Kluber will kick off the season against the upstart Houston Astros, followed by a three-game ser	\N	\N	2015-04-08 04:59:39.001782	2015-04-08 04:59:39.001782
+1109	BR	Boston Red Sox	8	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>The Detroit Tigers begin their push for a fifth straight AL Central title at home against the Minnesota Twins, followed by a series with what could be their	\N	\N	2015-04-08 04:59:39.367409	2015-04-08 04:59:39.367409
+1110	BR	Pittsburgh Pirates	7	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>As they look to again go from worst to first, the Boston Red Sox start things off with some interleague action against the Philadelphia Phillies before head	\N	\N	2015-04-08 04:59:39.785678	2015-04-08 04:59:39.785678
+1111	BR	San Diego Padres	6	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>After a 20-year drought, the Pittsburgh Pirates now have a bona fide streak with consecutive playoff appearances, and they have the talent to make it three 	\N	\N	2015-04-08 04:59:40.171675	2015-04-08 04:59:40.171675
+1112	BR	Los Angeles Angels	5	1	2015	<strong><strong><strong>What to Watch for Opening Week</strong></strong></strong>No team added more talent this offseason than the San Diego Padres, and their new roster will start the season against their top competition for the NL West title in the Los	\N	\N	2015-04-08 04:59:40.505388	2015-04-08 04:59:40.505388
+1113	BR	Los Angeles Dodgers	4	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>The Los Angeles Angels led the league in wins a year ago, but they'll have their hands full trying to defend their division title this season, and it starts	\N	\N	2015-04-08 04:59:40.857254	2015-04-08 04:59:40.857254
+1114	BR	Seattle Mariners	3	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>A terrific matchup of Clayton Kershaw and James Shields kicks off the season for the Los Angeles Dodgers as they take on the new-look San Diego Padres. Afte	\N	\N	2015-04-08 04:59:41.213715	2015-04-08 04:59:41.213715
+1115	BR	St. Louis Cardinals	2	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>After coming one game short of reaching the playoffs last season, the Seattle Mariners added key pieces to the puzzle this offseason and look poised to make	\N	\N	2015-04-08 04:59:41.565171	2015-04-08 04:59:41.565171
+1116	BR	Washington Nationals	1	1	2015	<strong><strong><strong><strong>What to Watch for Opening Week</strong></strong></strong></strong>The St. Louis Cardinals began their season on a high note Sunday night, shutting out the rival Chicago Cubs 3-0 behind a strong start from Adam Wainwright. 	\N	\N	2015-04-08 04:59:41.93265	2015-04-08 04:59:41.93265
+1117	BI	Los Angeles Dodgers	1	1	2015	<strong>What to know</strong>: In 2014, new Dodgers president of baseball operations Andrew Friedman was working with an $82 million payroll with the Tampa Bay Rays. This season, the Dodgers are <a sl-processed="1" href="https://sports.yahoo.com/news/ap-	\N	\N	2015-04-08 04:59:51.686561	2015-04-08 04:59:51.686561
+1118	BI	Washington Nationals	2	1	2015	<strong>What to know</strong>: The Nationals took a great rotation and made it the best in baseball when they<a sl-processed="1" href="http://www.businessinsider.com/washington-nationals-max-scherzer-contract-2015-1"> added 2013 Cy Young Award winner Max	\N	\N	2015-04-08 04:59:52.009803	2015-04-08 04:59:52.009803
+1119	BI	St. Louis Cardinals	3	1	2015	<strong>What to know</strong>: The Cardinals' roster is largely unchanged from 2014. The biggest offseason move was to trade for outfielder Jason Heyward, who has hit just 25 home runs in the last two seasons combined. Heyward will replace the late Oscar	\N	\N	2015-04-08 04:59:52.324367	2015-04-08 04:59:52.324367
+730	USA	Los Angeles Angels	4	0	2015	Slugger Josh Hamilton and his huge contract face an uncertain future.	\N	\N	2015-04-08 02:35:44.764222	2015-04-08 02:35:44.764222
+1120	BI	Los Angeles Angels	4	1	2015	<strong>What to know</strong><span style="line-height: 1.5em;">: Outfielder Josh Hamilton </span><a sl-processed="1" href="http://sports.yahoo.com/news/josh-hamilton-will-not-be-suspended-for-drug-relapse-162247060.html">won't be suspended</a><span style	\N	\N	2015-04-08 04:59:52.616304	2015-04-08 04:59:52.616304
+1121	BI	Seattle Mariners	5	1	2015	<strong>What to know</strong>:&nbsp;<span style="line-height: 1.5em;">The Mariners are one of the favorites in the American League thanks to an already strong pitching staff that will now be even better with a full season from Taijuan Walker who dominate	\N	\N	2015-04-08 04:59:52.943792	2015-04-08 04:59:52.943792
+1122	BI	Boston Red Sox	6	1	2015	<strong>What to know</strong>: The Red Sox have a good shot to go from worst to first in the always-tough American League East thanks to a pair of signings,&nbsp;<a sl-processed="1" href="http://www.mlbtraderumors.com/2014/11/red-sox-agree-to-terms-with-	\N	\N	2015-04-08 04:59:53.259181	2015-04-08 04:59:53.259181
+1123	BI	Oakland Athletics	7	1	2015	<strong>What to know</strong>: The A's lost pitcher Jon Lester to free agency, whom they had acquired at the trade deadline last season. But they may have made the most underrated acquisition of the off-season, trading for utility man Ben Zobrist. Only t	\N	\N	2015-04-08 04:59:53.608163	2015-04-08 04:59:53.608163
+1124	BI	Detroit Tigers	8	1	2015	<strong>What to know</strong>: The Tigers lost former Cy Young winner Max Scherzer to free agency. But they will also have former Cy Young winner David Price for a full season for the first time. And they still have Miguel Cabrera, whose career <a sl-pro	\N	\N	2015-04-08 04:59:53.945233	2015-04-08 04:59:53.945233
+1125	BI	Chicago Cubs	9	1	2015	<strong>What to know</strong>: The Cubs sent down slugging third base prospect Kris Bryant to the minors despite a monster Spring Training and most believe it was so they can delay his free agency. If true, he won't be down long, as he <a sl-processed="1	\N	\N	2015-04-08 04:59:54.239946	2015-04-08 04:59:54.239946
+1126	BI	Cleveland Indians	10	1	2015	<strong>What to know</strong>: The Indians didn't add much to a roster that won 85 games and just missed the playoffs in 2014. However, if the team can build on their 2014 post-All-Star break record of 38-30 that included a team ERA of 3.03, they already	\N	\N	2015-04-08 04:59:54.550859	2015-04-08 04:59:54.550859
+1127	BI	San Diego Padres	11	1	2015	<strong>What to know</strong>: The Padres shook up their roster with a series of trades, adding outfielder Matt Kemp (from the Dodgers), Justin Upton (Braves), and Wil Myers (Rays), as well as third baseman Wil Middlebrooks from the Red Sox. They also ad	\N	\N	2015-04-08 04:59:54.853581	2015-04-08 04:59:54.853581
+1128	BI	Pittsburgh Pirates	12	1	2015	<strong>What to know</strong>: The Pirates lost catcher Russell Martin to free agency, but saved a bit of their 2014 roster by <a sl-processed="1" href="http://www.mlbtraderumors.com/2014/12/pirates-to-re-sign-francisco-liriano.html">re-signing starting 	\N	\N	2015-04-08 04:59:55.165592	2015-04-08 04:59:55.165592
+1129	BI	Tampa Bay Rays	13	1	2015	<strong>What to know</strong>: The Rays lost their general manager (Andrew Friedman), their manager (Joe Maddon) and two of their best players (Ben Zobrist and Wil Myers). Now they are battling a slew of injuries to their pitching staff as three of their	\N	\N	2015-04-08 04:59:55.471784	2015-04-08 04:59:55.471784
+1130	BI	New York Mets	14	1	2015	<strong>What to know</strong>: The biggest offseason change for the Mets was <a sl-processed="1" href="http://www.businessinsider.com/mlb-boring-scoring-2014-10">bringing in their outfield fence, which should improve their offense</a>. The biggest questi	\N	\N	2015-04-08 04:59:55.777966	2015-04-08 04:59:55.777966
+1131	BI	San Francisco Giants	15	1	2015	<strong>What to know</strong>: The Giants have looked awful this spring, which is just fueling the feeling that this will be a down year for the defending champs. They lost the beloved Pablo Sandoval in free agency in what <a sl-processed="1" href="http:	\N	\N	2015-04-08 04:59:56.067829	2015-04-08 04:59:56.067829
+1132	BI	Toronto Blue Jays	16	1	2015	<strong>What to know</strong>: The Blue Jays added some pop to their lineup with the addition of third baseman Josh Donaldson, who hit 29 home runs for Oakland in 2014. They also added catcher <a sl-processed="1" href="http://espn.go.com/mlb/story/_/id/1	\N	\N	2015-04-08 04:59:56.364073	2015-04-08 04:59:56.364073
+1133	BI	New York Yankees	17	1	2015	<strong>What to know</strong>: The Yankees, who will play their first season without Derek Jeter since 1994, have been quiet by Yankees standards. They <a sl-processed="1" href="http://www.mlbtraderumors.com/2014/12/yankees-chase-headley-nearing-four-yea	\N	\N	2015-04-08 04:59:56.675878	2015-04-08 04:59:56.675878
+1134	BI	Miami Marlins	18	1	2015	<strong>What to know</strong>: The Marlins' most important move this offseason was the <a sl-processed="1" href="http://www.businessinsider.com/giancarlo-stanton-marlins-contract-2014-11">$325 million contract extension for Giancarlo Stanton</a>, which s	\N	\N	2015-04-08 04:59:56.967632	2015-04-08 04:59:56.967632
+1135	BI	Milwaukee Brewers	19	1	2015	<strong>What to know</strong>: The Brewers have made few changes to a team that won 82 games in 2014. The most significant move was <a sl-processed="1" href="http://www.mlbtraderumors.com/2015/01/rangers-on-verge-of-acquiring-yovani-gallardo.html">tradin	\N	\N	2015-04-08 04:59:57.311288	2015-04-08 04:59:57.311288
+1136	BI	Baltimore Orioles	20	1	2015	<strong>What to know</strong>: The Orioles surprised the baseball world by winning the AL East in 2014. But things will be tougher in 2015 without Nelson Cruz, who hit 40 home runs for the O's in 2014. The Orioles also lost outfielder Nick Markakis, reli	\N	\N	2015-04-08 04:59:57.612286	2015-04-08 04:59:57.612286
+1137	BI	Chicago White Sox	21	1	2015	<strong>What to know</strong>: The White Sox made several big moves, <a sl-processed="1" href="http://www.mlbtraderumors.com/2014/12/white-sox-to-sign-david-robertson.html">signing free agent closer David Robertson</a>, <a sl-processed="1" href="http://w	\N	\N	2015-04-08 04:59:57.934945	2015-04-08 04:59:57.934945
+1138	BI	Houston Astros	22	1	2015	<strong>What to know</strong><span style="line-height: 1.5em;">: The Astros, who had a $26.1 million payroll just two years ago, continue to build and add pieces, signing free agents </span><a sl-processed="1" href="http://www.mlbtraderumors.com/2014/12/	\N	\N	2015-04-08 04:59:58.261108	2015-04-08 04:59:58.261108
+1139	BI	Kansas City Royals	23	1	2015	<strong>What to know</strong>:<span style="line-height: 1.5em;">&nbsp;The Royals overachieved in 2014, surprising many with a run to the World Series. But they will have a tough time repeating without their ace, James Shields, who signed with the Padres.	\N	\N	2015-04-08 04:59:58.577928	2015-04-08 04:59:58.577928
+1140	BI	Cincinnati Reds	24	1	2015	<strong>What to know</strong>:The Reds' hopes for the 2015 season rest completely on the shoulders of Joey Votto and Jay Bruce. A leg injury limited Votto to just 62 games in 2014 and Bruce hit just 18 home runs after averaging 30 per season over the pre	\N	\N	2015-04-08 04:59:58.897931	2015-04-08 04:59:58.897931
+1141	BI	Texas Rangers	25	1	2015	<strong>What to know</strong>: The Rangers are another team that has been very quiet this offseason, having not made any major additions to a roster that lost 95 games in 2014 and lost Yu Darvish to Tommy John surgery from an already weak rotation. Inste	\N	\N	2015-04-08 04:59:59.17619	2015-04-08 04:59:59.17619
+1142	BI	Arizona Diamondbacks	26	1	2015	<strong>What to know</strong>: The Diamondbacks added slugging third baseman Yasmany Tomas from Cuba <a style="" sl-processed="1" href="http://m.mlb.com/news/article/102525700/cuban-yasmany-tomas-d-backs-finalize-6-year-contract">with a 6-year, $68.5 mil	\N	\N	2015-04-08 04:59:59.478532	2015-04-08 04:59:59.478532
+1143	BI	Minnesota Twins	27	1	2015	<strong>What to know</strong>: The Twins signed <a sl-processed="1" href="http://www.mlbtraderumors.com/2014/12/twins-nearing-deal-with-ervin-santana.html">veteran starting pitcher Ervin Santana</a> and <a sl-processed="1" href="http://www.mlbtraderumors	\N	\N	2015-04-08 04:59:59.788005	2015-04-08 04:59:59.788005
+1144	BI	Atlanta Braves	28	1	2015	<strong>What to know</strong>: The Braves did sign outfielder <a sl-processed="1" href="http://www.mlbtraderumors.com/2014/12/braves-to-sign-nick-markakis.html">Nick Markakis to a four-year, $44 million deal</a>, but they also traded away outfielder Just	\N	\N	2015-04-08 05:00:00.105117	2015-04-08 05:00:00.105117
+1145	BI	Colorado Rockies	29	1	2015	<strong>What to know</strong>: The Rockies lost one of their best hitters in Michael Cuddyer. The key for the Rockies is Troy Tulowitzki who has played in just 264 games over the last three seasons. Early <a sl-processed="1" href="http://www.denverpost.c	\N	\N	2015-04-08 05:00:00.413565	2015-04-08 05:00:00.413565
+1146	BI	Philadelphia Phillies	30	1	2015	<strong>What to know</strong>: The Phillies already had a bad situation. But it got a lot worst when one of their only valuable trade pieces, starting pitcher Cliff Lee, went down with an elbow surgery. He will start the season on the disabled list and <	\N	\N	2015-04-08 05:00:00.71943	2015-04-08 05:00:00.71943
+1147	CBS	Washington Nationals	1	1	2015	The number of people who believe Bryce Harper is a bust and Stephen Strasburg isn't an ace is just hilarious.	\N	\N	2015-04-08 05:00:09.959244	2015-04-08 05:00:09.959244
+1148	CBS	Los Angeles Dodgers	2	1	2015	I definitely had them too low last time. The reason was that the bullpen will be very worrisome until Kenley Jansen gets back. That's still the case, but I just downgraded them too much for it.	\N	\N	2015-04-08 05:00:10.463092	2015-04-08 05:00:10.463092
+1149	CBS	Pittsburgh Pirates	3	1	2015	I admittedly might still be a bit overzealous on the Pirates, but I like their chances at a deep playoff run this season. When (not if!) Gregory Polanco breaks out, this is the most exciting and maybe even best outfield in baseball.	\N	\N	2015-04-08 05:00:10.899624	2015-04-08 05:00:10.899624
+1150	CBS	Seattle Mariners	4	1	2015	Again, I may have been a bit overzealous with the last rankings, but I still think very highly of Seattle this season and it has the potential for a ridiculous playoff rotation if Taijuan Walker pans out like he should.	\N	\N	2015-04-08 05:00:11.326884	2015-04-08 05:00:11.326884
+1151	CBS	Los Angeles Angels	5	1	2015	I had them too low last time, but not by much.	\N	\N	2015-04-08 05:00:11.757341	2015-04-08 05:00:11.757341
+1152	CBS	St. Louis Cardinals	6	1	2015	I know that power is becoming more and more scarce, but it's not outrageous to say the Cardinals might not have a single player hit 20 homers this season. Jhonny Peralta had 21 and Matt Holliday had 20 last year. Matt Adams, Kolten Wong, Jason Heyward al	\N	\N	2015-04-08 05:00:12.238808	2015-04-08 05:00:12.238808
+1153	CBS	Detroit Tigers	7	1	2015	Most of the spring injuries have progressed nicely (not all, though, as Justin Verlander will start on the DL), so I'm comfortable with having them at the top of the AL Central again.	\N	\N	2015-04-08 05:00:12.860157	2015-04-08 05:00:12.860157
+1154	CBS	Cleveland Indians	8	1	2015	There are lots of reasons to love the Indians this season -- and I do have them as a playoff team -- but the back of the rotation isn't confidence-inspiring for me. The defense is still suspect and can we be sure about repeat performances from Michael Br	\N	\N	2015-04-08 05:00:13.244726	2015-04-08 05:00:13.244726
+1155	CBS	Boston Red Sox	9	1	2015	Fearless prediction: Mookie Betts will be the best Mookie in MLB history.	\N	\N	2015-04-08 05:00:13.562946	2015-04-08 05:00:13.562946
+1156	CBS	Baltimore Orioles	10	1	2015	I can't put my finger on why, but this is the team I'm least confident in ranking. They seem very unpredictable.	\N	\N	2015-04-08 05:00:13.948056	2015-04-08 05:00:13.948056
+1157	CBS	San Francisco Giants	11	1	2015	You guys need to do better than 'keep picking against us, that's how we like it.' That doesn't make sense when you don't actually play for the team and the last two times the Giants won it all, they missed the playoffs the following season. I also think 	\N	\N	2015-04-08 05:00:14.300002	2015-04-08 05:00:14.300002
+1158	CBS	Kansas City Royals	12	1	2015	I wonder if they would have been better off not adding Alex Rios and just going with Lorenzo Cain in right field and Jarrod Dyson in center. I'm sure their pitchers wouldn't have minded.	\N	\N	2015-04-08 05:00:14.646027	2015-04-08 05:00:14.646027
+1159	CBS	Chicago Cubs	13	1	2015	I still think they're one year away, but that second wild card makes things a lot more workable. [ENTER SCALDING HOT TAKE ON KRIS BRYANT HERE]	\N	\N	2015-04-08 05:00:14.997161	2015-04-08 05:00:14.997161
+1160	CBS	Chicago White Sox	14	1	2015	Great extension this spring for Adam Eaton and now the leadoff spot is solidified for the foreseeable future. Rick Hahn just keeps getting better and better.	\N	\N	2015-04-08 05:00:15.333058	2015-04-08 05:00:15.333058
+1161	CBS	New York Yankees	15	1	2015	There's actually an awful lot of upside here, but that comes with an inordinate amount of risk, too. For example, what are the odds that Carlos Beltran, Mark Teixeira, A-Rod, Masahiro Tanaka, CC Sabathia and Michael Pineda all avoid the DL all season?	\N	\N	2015-04-08 05:00:15.690696	2015-04-08 05:00:15.690696
+1162	CBS	San Diego Padres	16	1	2015	I usually avoid spring stats, but I'm intrigued by Will Middlebrooks playing well. He's still only 26 and was very good as a rookie in 2012. Perhaps the change of scenery (and coasts ... and leagues) turns him around.	\N	\N	2015-04-08 05:00:16.04405	2015-04-08 05:00:16.04405
+1163	CBS	Toronto Blue Jays	17	1	2015	Losing Marcus Stroman for the season was a pretty devastating blow. They'll need big years from both Aaron Sanchez and Daniel Norris now.	\N	\N	2015-04-08 05:00:16.41444	2015-04-08 05:00:16.41444
+1164	CBS	Miami Marlins	18	1	2015	After the All-Star break last season, leadoff man Dee Gordon had a .300 on-base percentage (the league OBP was .314 last season) with 47 strikeouts and four walks. He stole 21 bases, but was caught stealing 10 times. He was really bad in 2012 and 2013, t	\N	\N	2015-04-08 05:00:16.765871	2015-04-08 05:00:16.765871
+1165	CBS	New York Mets	19	1	2015	They will still be better, but losing Zack Wheeler was a tough blow. An intriguing ballclub nonetheless and Matt Harvey is the easiest comeback player of the year pick in recent memory.	\N	\N	2015-04-08 05:00:17.096894	2015-04-08 05:00:17.096894
+1166	CBS	Cincinnati Reds	20	1	2015	They lost 827 player games to injury last season. Sure, Mat Latos is gone, but better health from the likes of Homer Bailey (he'll only miss a few starts), Joey Votto, Brandon Phillips et al and better left field play than last season means this team sho	\N	\N	2015-04-08 05:00:17.468155	2015-04-08 05:00:17.468155
+1167	CBS	Oakland Athletics	21	1	2015	The A's didn't use a single batting order more than three times last season, which is amazing. Look at the roster now with all the platoon and multi-position guys and it looks like Bob Melvin will have a similarly variable lineup this season.	\N	\N	2015-04-08 05:00:17.813326	2015-04-08 05:00:17.813326
+1168	CBS	Milwaukee Brewers	22	1	2015	Great offense, worrisome pitching. I do think Ryan Braun is going to have a big season, which I know makes lots of you scream.	\N	\N	2015-04-08 05:00:18.225312	2015-04-08 05:00:18.225312
+1169	CBS	Houston Astros	23	1	2015	They had the worst bullpen in the AL by nearly a half-run last season. Adding Pat Neshek, Luke Gregerson and Joe Thatcher to the mix has perhaps flown too much under the radar nationally.	\N	\N	2015-04-08 05:00:18.587899	2015-04-08 05:00:18.587899
+1170	CBS	Minnesota Twins	24	1	2015	Oswaldo Arcia hit 20 homers last season in only 372 at-bats. He's still only 23 years old.	\N	\N	2015-04-08 05:00:18.93074	2015-04-08 05:00:18.93074
+1171	CBS	Tampa Bay Rays	25	1	2015	It already looked like a down year, but 60 percent of their best possible rotation is hurt. Needless to say, the post-Maddon era isn't off to a good start.	\N	\N	2015-04-08 05:00:19.299918	2015-04-08 05:00:19.299918
+1172	CBS	Colorado Rockies	26	1	2015	Your owner's big offseason addition being Macaroni Grill has to be a bit aggravating, no?	\N	\N	2015-04-08 05:00:19.655221	2015-04-08 05:00:19.655221
+1173	CBS	Arizona Diamondbacks	27	1	2015	Generally speaking, 'Josh Collmenter, opening day starter' isn't the precursor of a playoff run.	\N	\N	2015-04-08 05:00:20.252461	2015-04-08 05:00:20.252461
+1174	CBS	Texas Rangers	28	1	2015	I was already a bit worried about the lack of bounce-back potential here, but losing Yu Darvish for the season means it's even more an uphill battle.	\N	\N	2015-04-08 05:00:20.677913	2015-04-08 05:00:20.677913
+1175	CBS	Atlanta Braves	29	1	2015	I like Julio Teheran and Alex Wood atop the rotation, so there's that.	\N	\N	2015-04-08 05:00:21.402535	2015-04-08 05:00:21.402535
+1176	CBS	Philadelphia Phillies	30	1	2015	The good news is that they'll be selling hard liquor in Citizens Bank Park this season.	\N	\N	2015-04-08 05:00:21.776623	2015-04-08 05:00:21.776623
+1177	MLB	Washington Nationals	1	1	2015	90	\N	\N	2015-04-08 05:00:27.548604	2015-04-08 05:00:27.548604
+1178	MLB	Los Angeles Dodgers	2	1	2015	87	\N	\N	2015-04-08 05:00:27.841411	2015-04-08 05:00:27.841411
+1179	MLB	Seattle Mariners	3	1	2015	84	\N	\N	2015-04-08 05:00:28.122018	2015-04-08 05:00:28.122018
+1180	MLB	St. Louis Cardinals	4	1	2015	81	\N	\N	2015-04-08 05:00:28.399026	2015-04-08 05:00:28.399026
+1181	MLB	Pittsburgh Pirates	5	1	2015	78	\N	\N	2015-04-08 05:00:28.687758	2015-04-08 05:00:28.687758
+1182	MLB	Los Angeles Angels	6	1	2015	75	\N	\N	2015-04-08 05:00:28.965246	2015-04-08 05:00:28.965246
+1183	MLB	Detroit Tigers	7	1	2015	72	\N	\N	2015-04-08 05:00:29.241681	2015-04-08 05:00:29.241681
+1184	MLB	Cleveland Indians	8	1	2015	69	\N	\N	2015-04-08 05:00:29.513184	2015-04-08 05:00:29.513184
+1185	MLB	Boston Red Sox	9	1	2015	66	\N	\N	2015-04-08 05:00:29.788866	2015-04-08 05:00:29.788866
+1186	MLB	Baltimore Orioles	10	1	2015	63	\N	\N	2015-04-08 05:00:30.099362	2015-04-08 05:00:30.099362
+1187	MLB	San Diego Padres	11	1	2015	60	\N	\N	2015-04-08 05:00:30.374811	2015-04-08 05:00:30.374811
+1188	MLB	Miami Marlins	12	1	2015	57	\N	\N	2015-04-08 05:00:30.678747	2015-04-08 05:00:30.678747
+1189	MLB	Toronto Blue Jays	13	1	2015	54	\N	\N	2015-04-08 05:00:30.95042	2015-04-08 05:00:30.95042
+1190	MLB	Chicago White Sox	14	1	2015	51	\N	\N	2015-04-08 05:00:31.250222	2015-04-08 05:00:31.250222
+1191	MLB	Oakland Athletics	15	1	2015	48	\N	\N	2015-04-08 05:00:31.532569	2015-04-08 05:00:31.532569
+1192	MLB	New York Mets	16	1	2015	45	\N	\N	2015-04-08 05:00:31.822485	2015-04-08 05:00:31.822485
+1193	MLB	New York Yankees	17	1	2015	42	\N	\N	2015-04-08 05:00:32.110272	2015-04-08 05:00:32.110272
+1194	MLB	San Francisco Giants	18	1	2015	39	\N	\N	2015-04-08 05:00:32.389303	2015-04-08 05:00:32.389303
+1195	MLB	Kansas City Royals	19	1	2015	36	\N	\N	2015-04-08 05:00:32.667552	2015-04-08 05:00:32.667552
+1196	MLB	Chicago Cubs	20	1	2015	33	\N	\N	2015-04-08 05:00:33.152957	2015-04-08 05:00:33.152957
+1197	MLB	Houston Astros	21	1	2015	30	\N	\N	2015-04-08 05:00:33.355184	2015-04-08 05:00:33.355184
+1198	MLB	Atlanta Braves	22	1	2015	27	\N	\N	2015-04-08 05:00:33.530763	2015-04-08 05:00:33.530763
+1199	MLB	Milwaukee Brewers	23	1	2015	24	\N	\N	2015-04-08 05:00:33.701292	2015-04-08 05:00:33.701292
+1200	MLB	Arizona Diamondbacks	24	1	2015	21	\N	\N	2015-04-08 05:00:33.861038	2015-04-08 05:00:33.861038
+1201	MLB	Philadelphia Phillies	25	1	2015	18	\N	\N	2015-04-08 05:00:34.024835	2015-04-08 05:00:34.024835
+1202	MLB	Tampa Bay Rays	26	1	2015	15	\N	\N	2015-04-08 05:00:34.187813	2015-04-08 05:00:34.187813
+1203	MLB	Texas Rangers	27	1	2015	12	\N	\N	2015-04-08 05:00:34.345141	2015-04-08 05:00:34.345141
+1204	MLB	Cincinnati Reds	28	1	2015	9	\N	\N	2015-04-08 05:00:34.508292	2015-04-08 05:00:34.508292
+1205	MLB	Colorado Rockies	29	1	2015	6	\N	\N	2015-04-08 05:00:34.680463	2015-04-08 05:00:34.680463
+1206	MLB	Minnesota Twins	30	1	2015	3	\N	\N	2015-04-08 05:00:34.839253	2015-04-08 05:00:34.839253
+791	CBS	Los Angeles Angels	5	0	2015	I had them too low last time, but not by much.	\N	\N	2015-04-08 02:36:24.194507	2015-04-08 02:36:24.194507
+856	Rant	Cleveland Indians	21	0	2015	21. Cleveland Indians	\N	\N	2015-04-08 02:37:20.18785	2015-04-08 02:37:20.18785
+657	MLB	Houston Astros	21	0	2015	30	\N	\N	2015-04-08 02:34:21.062111	2015-04-08 02:34:21.062111
+658	MLB	Atlanta Braves	22	0	2015	27	\N	\N	2015-04-08 02:34:21.233147	2015-04-08 02:34:21.233147
+659	MLB	Milwaukee Brewers	23	0	2015	24	\N	\N	2015-04-08 02:34:21.414701	2015-04-08 02:34:21.414701
+660	MLB	Arizona Diamondbacks	24	0	2015	21	\N	\N	2015-04-08 02:34:21.580578	2015-04-08 02:34:21.580578
+661	MLB	Philadelphia Phillies	25	0	2015	18	\N	\N	2015-04-08 02:34:21.768831	2015-04-08 02:34:21.768831
+662	MLB	Tampa Bay Rays	26	0	2015	15	\N	\N	2015-04-08 02:34:21.946443	2015-04-08 02:34:21.946443
+663	MLB	Texas Rangers	27	0	2015	12	\N	\N	2015-04-08 02:34:22.129115	2015-04-08 02:34:22.129115
+664	MLB	Cincinnati Reds	28	0	2015	9	\N	\N	2015-04-08 02:34:22.296688	2015-04-08 02:34:22.296688
+665	MLB	Colorado Rockies	29	0	2015	6	\N	\N	2015-04-08 02:34:22.457829	2015-04-08 02:34:22.457829
+666	MLB	Minnesota Twins	30	0	2015	3	\N	\N	2015-04-08 02:34:22.652195	2015-04-08 02:34:22.652195
+667	BI	Los Angeles Dodgers	1	0	2015	<strong>What to know</strong>: In 2014, new Dodgers president of baseball operations Andrew Friedman was working with an $82 million payroll with the Tampa Bay Rays. This season, the Dodgers are <a sl-processed="1" href="https://sports.yahoo.com/news/ap-	\N	\N	2015-04-08 02:34:35.912469	2015-04-08 02:34:35.912469
+668	BI	Washington Nationals	2	0	2015	<strong>What to know</strong>: The Nationals took a great rotation and made it the best in baseball when they<a sl-processed="1" href="http://www.businessinsider.com/washington-nationals-max-scherzer-contract-2015-1"> added 2013 Cy Young Award winner Max	\N	\N	2015-04-08 02:34:36.249884	2015-04-08 02:34:36.249884
+669	BI	St. Louis Cardinals	3	0	2015	<strong>What to know</strong>: The Cardinals' roster is largely unchanged from 2014. The biggest offseason move was to trade for outfielder Jason Heyward, who has hit just 25 home runs in the last two seasons combined. Heyward will replace the late Oscar	\N	\N	2015-04-08 02:34:36.600854	2015-04-08 02:34:36.600854
+670	BI	Los Angeles Angels	4	0	2015	<strong>What to know</strong><span style="line-height: 1.5em;">: Outfielder Josh Hamilton </span><a sl-processed="1" href="http://sports.yahoo.com/news/josh-hamilton-will-not-be-suspended-for-drug-relapse-162247060.html">won't be suspended</a><span style	\N	\N	2015-04-08 02:34:36.94727	2015-04-08 02:34:36.94727
+671	BI	Seattle Mariners	5	0	2015	<strong>What to know</strong>:&nbsp;<span style="line-height: 1.5em;">The Mariners are one of the favorites in the American League thanks to an already strong pitching staff that will now be even better with a full season from Taijuan Walker who dominate	\N	\N	2015-04-08 02:34:37.297719	2015-04-08 02:34:37.297719
+672	BI	Boston Red Sox	6	0	2015	<strong>What to know</strong>: The Red Sox have a good shot to go from worst to first in the always-tough American League East thanks to a pair of signings,&nbsp;<a sl-processed="1" href="http://www.mlbtraderumors.com/2014/11/red-sox-agree-to-terms-with-	\N	\N	2015-04-08 02:34:37.643272	2015-04-08 02:34:37.643272
+673	BI	Oakland Athletics	7	0	2015	<strong>What to know</strong>: The A's lost pitcher Jon Lester to free agency, whom they had acquired at the trade deadline last season. But they may have made the most underrated acquisition of the off-season, trading for utility man Ben Zobrist. Only t	\N	\N	2015-04-08 02:34:37.996767	2015-04-08 02:34:37.996767
+674	BI	Detroit Tigers	8	0	2015	<strong>What to know</strong>: The Tigers lost former Cy Young winner Max Scherzer to free agency. But they will also have former Cy Young winner David Price for a full season for the first time. And they still have Miguel Cabrera, whose career <a sl-pro	\N	\N	2015-04-08 02:34:38.342439	2015-04-08 02:34:38.342439
+675	BI	Chicago Cubs	9	0	2015	<strong>What to know</strong>: The Cubs sent down slugging third base prospect Kris Bryant to the minors despite a monster Spring Training and most believe it was so they can delay his free agency. If true, he won't be down long, as he <a sl-processed="1	\N	\N	2015-04-08 02:34:38.674467	2015-04-08 02:34:38.674467
+787	CBS	Washington Nationals	1	0	2015	The number of people who believe Bryce Harper is a bust and Stephen Strasburg isn't an ace is just hilarious.	\N	\N	2015-04-08 02:36:21.406307	2015-04-08 02:36:21.406307
+676	BI	Cleveland Indians	10	0	2015	<strong>What to know</strong>: The Indians didn't add much to a roster that won 85 games and just missed the playoffs in 2014. However, if the team can build on their 2014 post-All-Star break record of 38-30 that included a team ERA of 3.03, they already	\N	\N	2015-04-08 02:34:39.031006	2015-04-08 02:34:39.031006
+677	BI	San Diego Padres	11	0	2015	<strong>What to know</strong>: The Padres shook up their roster with a series of trades, adding outfielder Matt Kemp (from the Dodgers), Justin Upton (Braves), and Wil Myers (Rays), as well as third baseman Wil Middlebrooks from the Red Sox. They also ad	\N	\N	2015-04-08 02:34:39.343212	2015-04-08 02:34:39.343212
+678	BI	Pittsburgh Pirates	12	0	2015	<strong>What to know</strong>: The Pirates lost catcher Russell Martin to free agency, but saved a bit of their 2014 roster by <a sl-processed="1" href="http://www.mlbtraderumors.com/2014/12/pirates-to-re-sign-francisco-liriano.html">re-signing starting 	\N	\N	2015-04-08 02:34:39.726879	2015-04-08 02:34:39.726879
+679	BI	Tampa Bay Rays	13	0	2015	<strong>What to know</strong>: The Rays lost their general manager (Andrew Friedman), their manager (Joe Maddon) and two of their best players (Ben Zobrist and Wil Myers). Now they are battling a slew of injuries to their pitching staff as three of their	\N	\N	2015-04-08 02:34:40.067374	2015-04-08 02:34:40.067374
+680	BI	New York Mets	14	0	2015	<strong>What to know</strong>: The biggest offseason change for the Mets was <a sl-processed="1" href="http://www.businessinsider.com/mlb-boring-scoring-2014-10">bringing in their outfield fence, which should improve their offense</a>. The biggest questi	\N	\N	2015-04-08 02:34:40.411661	2015-04-08 02:34:40.411661
+681	BI	San Francisco Giants	15	0	2015	<strong>What to know</strong>: The Giants have looked awful this spring, which is just fueling the feeling that this will be a down year for the defending champs. They lost the beloved Pablo Sandoval in free agency in what <a sl-processed="1" href="http:	\N	\N	2015-04-08 02:34:40.761678	2015-04-08 02:34:40.761678
+731	USA	Seattle Mariners	5	0	2015	Offense improves with 2014 home run champion Nelson Cruz in the mix.	\N	\N	2015-04-08 02:35:45.128671	2015-04-08 02:35:45.128671
+682	BI	Toronto Blue Jays	16	0	2015	<strong>What to know</strong>: The Blue Jays added some pop to their lineup with the addition of third baseman Josh Donaldson, who hit 29 home runs for Oakland in 2014. They also added catcher <a sl-processed="1" href="http://espn.go.com/mlb/story/_/id/1	\N	\N	2015-04-08 02:34:41.110747	2015-04-08 02:34:41.110747
+683	BI	New York Yankees	17	0	2015	<strong>What to know</strong>: The Yankees, who will play their first season without Derek Jeter since 1994, have been quiet by Yankees standards. They <a sl-processed="1" href="http://www.mlbtraderumors.com/2014/12/yankees-chase-headley-nearing-four-yea	\N	\N	2015-04-08 02:34:41.433196	2015-04-08 02:34:41.433196
+684	BI	Miami Marlins	18	0	2015	<strong>What to know</strong>: The Marlins' most important move this offseason was the <a sl-processed="1" href="http://www.businessinsider.com/giancarlo-stanton-marlins-contract-2014-11">$325 million contract extension for Giancarlo Stanton</a>, which s	\N	\N	2015-04-08 02:34:41.771963	2015-04-08 02:34:41.771963
+685	BI	Milwaukee Brewers	19	0	2015	<strong>What to know</strong>: The Brewers have made few changes to a team that won 82 games in 2014. The most significant move was <a sl-processed="1" href="http://www.mlbtraderumors.com/2015/01/rangers-on-verge-of-acquiring-yovani-gallardo.html">tradin	\N	\N	2015-04-08 02:34:42.124753	2015-04-08 02:34:42.124753
+686	BI	Baltimore Orioles	20	0	2015	<strong>What to know</strong>: The Orioles surprised the baseball world by winning the AL East in 2014. But things will be tougher in 2015 without Nelson Cruz, who hit 40 home runs for the O's in 2014. The Orioles also lost outfielder Nick Markakis, reli	\N	\N	2015-04-08 02:34:42.45228	2015-04-08 02:34:42.45228
+687	BI	Chicago White Sox	21	0	2015	<strong>What to know</strong>: The White Sox made several big moves, <a sl-processed="1" href="http://www.mlbtraderumors.com/2014/12/white-sox-to-sign-david-robertson.html">signing free agent closer David Robertson</a>, <a sl-processed="1" href="http://w	\N	\N	2015-04-08 02:34:42.793407	2015-04-08 02:34:42.793407
+688	BI	Houston Astros	22	0	2015	<strong>What to know</strong><span style="line-height: 1.5em;">: The Astros, who had a $26.1 million payroll just two years ago, continue to build and add pieces, signing free agents </span><a sl-processed="1" href="http://www.mlbtraderumors.com/2014/12/	\N	\N	2015-04-08 02:34:43.152083	2015-04-08 02:34:43.152083
+689	BI	Kansas City Royals	23	0	2015	<strong>What to know</strong>:<span style="line-height: 1.5em;">&nbsp;The Royals overachieved in 2014, surprising many with a run to the World Series. But they will have a tough time repeating without their ace, James Shields, who signed with the Padres.	\N	\N	2015-04-08 02:34:43.483904	2015-04-08 02:34:43.483904
+690	BI	Cincinnati Reds	24	0	2015	<strong>What to know</strong>:The Reds' hopes for the 2015 season rest completely on the shoulders of Joey Votto and Jay Bruce. A leg injury limited Votto to just 62 games in 2014 and Bruce hit just 18 home runs after averaging 30 per season over the pre	\N	\N	2015-04-08 02:34:43.808929	2015-04-08 02:34:43.808929
+691	BI	Texas Rangers	25	0	2015	<strong>What to know</strong>: The Rangers are another team that has been very quiet this offseason, having not made any major additions to a roster that lost 95 games in 2014 and lost Yu Darvish to Tommy John surgery from an already weak rotation. Inste	\N	\N	2015-04-08 02:34:44.173765	2015-04-08 02:34:44.173765
+692	BI	Arizona Diamondbacks	26	0	2015	<strong>What to know</strong>: The Diamondbacks added slugging third baseman Yasmany Tomas from Cuba <a style="" sl-processed="1" href="http://m.mlb.com/news/article/102525700/cuban-yasmany-tomas-d-backs-finalize-6-year-contract">with a 6-year, $68.5 mil	\N	\N	2015-04-08 02:34:44.498036	2015-04-08 02:34:44.498036
+693	BI	Minnesota Twins	27	0	2015	<strong>What to know</strong>: The Twins signed <a sl-processed="1" href="http://www.mlbtraderumors.com/2014/12/twins-nearing-deal-with-ervin-santana.html">veteran starting pitcher Ervin Santana</a> and <a sl-processed="1" href="http://www.mlbtraderumors	\N	\N	2015-04-08 02:34:44.833556	2015-04-08 02:34:44.833556
+694	BI	Atlanta Braves	28	0	2015	<strong>What to know</strong>: The Braves did sign outfielder <a sl-processed="1" href="http://www.mlbtraderumors.com/2014/12/braves-to-sign-nick-markakis.html">Nick Markakis to a four-year, $44 million deal</a>, but they also traded away outfielder Just	\N	\N	2015-04-08 02:34:45.183813	2015-04-08 02:34:45.183813
+695	BI	Colorado Rockies	29	0	2015	<strong>What to know</strong>: The Rockies lost one of their best hitters in Michael Cuddyer. The key for the Rockies is Troy Tulowitzki who has played in just 264 games over the last three seasons. Early <a sl-processed="1" href="http://www.denverpost.c	\N	\N	2015-04-08 02:34:45.533701	2015-04-08 02:34:45.533701
+696	BI	Philadelphia Phillies	30	0	2015	<strong>What to know</strong>: The Phillies already had a bad situation. But it got a lot worst when one of their only valuable trade pieces, starting pitcher Cliff Lee, went down with an elbow surgery. He will start the season on the disabled list and <	\N	\N	2015-04-08 02:34:45.930619	2015-04-08 02:34:45.930619
+697	ESPN	Washington Nationals	1	0	2015	Jayson Werth, Anthony Rendon and Denard Span all begin the season on the disabled list, but it should take more than that to knock the Nationals out as favorites, thanks to what should be a phenomenal rotation. -- <i>Harper Gordek (@harpergordek), <a hre	\N	\N	2015-04-08 02:35:00.477776	2015-04-08 02:35:00.477776
+698	ESPN	Los Angeles Dodgers	2	0	2015	The NL West is the Dodgers' division to lose. On other teams, a rookie CF replacing the likes of Matt Kemp or displacing Yasiel Puig might face pressure. For L.A., Joc Pederson should slide in nicely. Big question ... how good/healthy will the back of th	\N	\N	2015-04-08 02:35:00.947909	2015-04-08 02:35:00.947909
+699	ESPN	St. Louis Cardinals	3	0	2015	The defending National League Central champion Cardinals reloaded their lineup in the offseason by acquiring Jason Heyward, who is an upgrade in right field by as much as 7 WAR. He had a big game in Sunday's season opener against the Cubs, getting three 	\N	\N	2015-04-08 02:35:01.350687	2015-04-08 02:35:01.350687
+700	ESPN	Pittsburgh Pirates	4	0	2015	Andrew McCutchen may be the best player in the National League, but look for Starling Marte to have a big year. He changed his stance midseason last year, dropping his leg kick, and hit .354 over the final two months. -- <i>David Schoenfield (@dschoenfie	\N	\N	2015-04-08 02:35:01.804444	2015-04-08 02:35:01.804444
+701	ESPN	Seattle Mariners	5	0	2015	They have the second-longest playoff drought in the majors -- they last made the postseason in 2001 -- but optimism is high with Nelson Cruz providing much-needed right-handed power and Taijuan Walker having a dominant spring training. Plus, King Felix. 	\N	\N	2015-04-08 02:35:02.293372	2015-04-08 02:35:02.293372
+702	ESPN	Detroit Tigers	6	0	2015	Detroit's stranglehold on the AL Central was strongly challenged last year and likely will be again in 2015. The lineup still packs a punch and David Price is good enough to soften the blow of Max Scherzer's departure, but the Tigers badly need a bounce-	\N	\N	2015-04-08 02:35:02.798349	2015-04-08 02:35:02.798349
+703	ESPN	Los Angeles Angels	7	0	2015	The Angels are looking to keep the good times rolling into 2015, and the best way to do that is with a fast start. The team has struggled in April in recent seasons, finishing above .500 in only two of the last six years. They'll have to buck the trend i	\N	\N	2015-04-08 02:35:03.2593	2015-04-08 02:35:03.2593
+704	ESPN	Baltimore Orioles	8	0	2015	Matt Wieters and J.J. Hardy will both begin the season on the disabled list, while Chris Davis won't play in Monday's season opener as he serves the final game of a 25-game suspension handed down in September for using amphetamines without a prescription	\N	\N	2015-04-08 02:35:03.780126	2015-04-08 02:35:03.780126
+732	USA	Pittsburgh Pirates	6	0	2015	How will infielder Jung Ho Kangs 40 home runs hit in 2014 in South Korea translate to the majors?	\N	\N	2015-04-08 02:35:45.461232	2015-04-08 02:35:45.461232
+705	ESPN	Cleveland Indians	9	0	2015	The Indians did not make a big splash this offseason; with Gavin Floyd's injury, it means their only major addition was Brandon Moss. However, their strong core of young players has many fans excited about what 2015 could hold for the team. -- <i>Stephan	\N	\N	2015-04-08 02:35:04.327583	2015-04-08 02:35:04.327583
+706	ESPN	San Diego Padres	10	0	2015	The Padres made the most offseason noise around the majors, including acquiring Craig Kimbrel on Sunday. Will it all be enough to get them into the playoffs? Matt Kemp, Wil Myers and Justin Upton is an outfield with marquee status and offensive potential	\N	\N	2015-04-08 02:35:05.799117	2015-04-08 02:35:05.799117
+707	ESPN	Toronto Blue Jays	11	0	2015	Despite losing Marcus Stroman to injury, the Blue Jays are poised to compete for a playoff spot in a wide-open AL East. The Jays will have a brand-new, if somewhat unconventional, Opening Day roster. In addition to newcomers Josh Donaldson and Russell Ma	\N	\N	2015-04-08 02:35:06.712708	2015-04-08 02:35:06.712708
+708	ESPN	Boston Red Sox	12	0	2015	The best player on the retooled Red Sox may not be free agents Hanley Ramirez or Pablo Sandoval, or longtime veterans David Ortiz or Dustin Pedroia. It's Mookie Betts, who hit .429 in spring training after hitting .291 in his 52-game MLB trial last seaso	\N	\N	2015-04-08 02:35:07.526027	2015-04-08 02:35:07.526027
+709	ESPN	Chicago White Sox	13	0	2015	The new-look White Sox will be without ace Chris Sale for the first week of the season, so they'll need new arms Jeff Samardzija and David Robertson to come out with sharp command after getting bombed all spring (28 innings pitched, 26 earned runs, 11 ho	\N	\N	2015-04-08 02:35:08.316495	2015-04-08 02:35:08.316495
+710	ESPN	Miami Marlins	14	0	2015	The Marlins traded Andrew Heaney and Nate Eovaldi from their surplus of talented young pitchers, and incrementally improved their infield with the additions of Martin Prado and Dee Gordon. They'll count on Mat Latos, Jarred Cosart and Henderson Alvarez t	\N	\N	2015-04-08 02:35:09.048283	2015-04-08 02:35:09.048283
+711	ESPN	Kansas City Royals	15	0	2015	The defending American League champs don't seem to be getting much respect in the preseason predictions. Losing James Shields hurts and Kendrys Morales and Alex Rios were dubious free-agent signings. Once again, it will be relief pitching and defense car	\N	\N	2015-04-08 02:35:09.83303	2015-04-08 02:35:09.83303
+712	ESPN	San Francisco Giants	16	0	2015	An all-around horrible spring training by Giants' pitchers certainly didn't answer many questions about a rotation already marred with mystery. Coupling that with an Opening Day lineup without Hunter Pence or almost any power-hitting presence, things are	\N	\N	2015-04-08 02:35:10.892379	2015-04-08 02:35:10.892379
+713	ESPN	New York Mets	17	0	2015	The Mets led all teams in OPS (.817) and on base percentage (.349) during spring training, while finishing second in slugging percentage (.468) and third in home runs (39). Can the bats stay hot and club like that when the real games begin? If so, the Me	\N	\N	2015-04-08 02:35:12.939727	2015-04-08 02:35:12.939727
+714	ESPN	New York Yankees	18	0	2015	The Yankees open 2015 with a mountain of question marks, but one of the exclamation points has been the spring training performance of Michael Pineda. He finished spring training with 19 innings pitched, an ERA of 1.42 and a 23-1 strikeout-to-walk ratio.	\N	\N	2015-04-08 02:35:14.016359	2015-04-08 02:35:14.016359
+715	ESPN	Oakland Athletics	19	0	2015	Oakland opens the year down two outfielders, as Coco Crisp and Josh Reddick will both be on the disabled list on Opening Day. Reddick is due back soon, and manager Bob Melvin is nothing if not adept at mixing and matching his roster to cover holes. -- <i	\N	\N	2015-04-08 02:35:16.784401	2015-04-08 02:35:16.784401
+716	ESPN	Chicago Cubs	20	0	2015	Many are predicting the Cubs to not only make the playoffs in 2015, but to win the World Series. Reality is that the team is probably one year away from being a legitimate World Series contender. -- <i>Joe Aiello (@VFTB), <a href="www.viewfromthebleacher	\N	\N	2015-04-08 02:35:18.154371	2015-04-08 02:35:18.154371
+717	ESPN	Milwaukee Brewers	21	0	2015	The Brewers are hoping their 150-plus days in first place in the NL Central last year is more of an indicator of their quality than the ugly September collapse. Whether they can keep up in an increasingly difficult division comes down to the lineup regai	\N	\N	2015-04-08 02:35:18.969858	2015-04-08 02:35:18.969858
+718	ESPN	Cincinnati Reds	22	0	2015	Will this be Johnny Cueto's last Opening Day as a Red? Can everyone stay healthy? If not, can the Reds compete? They have a ton of question marks, and GM Walt Jocketty didn't appear to answer many of them in the offseason. But hope always springs eternal	\N	\N	2015-04-08 02:35:19.688242	2015-04-08 02:35:19.688242
+719	ESPN	Houston Astros	23	0	2015	The Astros are going to strike out a gazillion times but George Springer, Chris Carter and Evan Gattis will mash a lot of home runs behind 2014 batting champ Jose Altuve. If the back of the rotation comes through, the Astros could have their first winnin	\N	\N	2015-04-08 02:35:20.40595	2015-04-08 02:35:20.40595
+720	ESPN	Tampa Bay Rays	24	0	2015	The Kevin Cash era begins in Tampa as the Rays begin the season with several of their starting pitchers on the disabled list. -- <i>ESPN.com</i>	\N	\N	2015-04-08 02:35:21.336113	2015-04-08 02:35:21.336113
+721	ESPN	Texas Rangers	25	0	2015	Yu Darvish is out for the season, but Prince Fielder and Shin-Soo Choo will look to show what they can do when healthy. Many already have written off the Rangers, but they just might be better than some people believe. -- <i>Brandon Land (@one_strike_awa	\N	\N	2015-04-08 02:35:22.555782	2015-04-08 02:35:22.555782
+722	ESPN	Minnesota Twins	26	0	2015	Can the Twins climb out of last place this season with the AL Central improving around them? The way their pitching staff fares during trips to Detroit and Chicago in the opening week should provide an early hint. -- <i>Nick Nelson (@nnelson9), <a href="	\N	\N	2015-04-08 02:35:23.555941	2015-04-08 02:35:23.555941
+723	ESPN	Atlanta Braves	27	0	2015	With just seven players on the Opening Day roster who were on last year's season-opening roster, the Braves will put a very different team on the field in 2015. Gone are the power-hitting Justin Upton, Jason Heyward and Evan Gattis, replaced by a hodgepo	\N	\N	2015-04-08 02:35:25.132711	2015-04-08 02:35:25.132711
+724	ESPN	Colorado Rockies	28	0	2015	The biggest "change" the Rockies made in the offseason was the promotion of an internal candidate to general manager. As spring training injuries riddled the starting rotation, releases and demotions suggest the biggest change might be toward accountabil	\N	\N	2015-04-08 02:35:27.522248	2015-04-08 02:35:27.522248
+725	ESPN	Arizona Diamondbacks	29	0	2015	The D-backs surprised most fans when they traded Trevor Cahill to the Braves and added Archie Bradley to the rotation. They followed that up by benching Aaron Hill in favor of starting shortstop Nick Ahmed, sliding Chris Owings to second base. Yasmany To	\N	\N	2015-04-08 02:35:29.458401	2015-04-08 02:35:29.458401
+726	ESPN	Philadelphia Phillies	30	0	2015	The Phillies' season-opening rotation will include Aaron Harang, Jerome Williams and Sean O'Sullivan. The starting center fielder played second base in Double-A last season. Enjoy these last few months of Cole Hamels, Phillies fans. -- <i>David Schoenfie	\N	\N	2015-04-08 02:35:30.810515	2015-04-08 02:35:30.810515
+727	USA	Washington Nationals	1	0	2015	The team that led the National League in ERA just added Max Scherzer to the rotation. Tanner Roarke was sent to the bullpen.	\N	\N	2015-04-08 02:35:43.147717	2015-04-08 02:35:43.147717
+728	USA	Los Angeles Dodgers	2	0	2015	The defense improves with second baseman Howie Kendrick and shortstop Jimmy Rollins up the middle.	\N	\N	2015-04-08 02:35:43.937466	2015-04-08 02:35:43.937466
+729	USA	St. Louis Cardinals	3	0	2015	Jason Heyward mans right field after the sudden death of Oscar Taveras.	\N	\N	2015-04-08 02:35:44.369637	2015-04-08 02:35:44.369637
+733	USA	Detroit Tigers	7	0	2015	Questions abound with the losses of Scherzer and Rick Porcello.	\N	\N	2015-04-08 02:35:45.814753	2015-04-08 02:35:45.814753
+734	USA	San Francisco Giants	8	0	2015	The defending World Series champions hope the rotation stays healthy.	\N	\N	2015-04-08 02:35:46.182889	2015-04-08 02:35:46.182889
+735	USA	Cleveland Indians	9	0	2015	Theres playoff potential despite a competitive division.	\N	\N	2015-04-08 02:35:46.711553	2015-04-08 02:35:46.711553
+736	USA	Chicago White Sox	10	0	2015	The acquisitions of Melky Cabrera, Adam LaRoche, David Robertson and Jeff Samardzija bring hope.	\N	\N	2015-04-08 02:35:47.012046	2015-04-08 02:35:47.012046
+737	USA	Boston Red Sox	11	0	2015	Worst-to-first-to-worst-to-first? Pablo Sandoval and Hanley Ramirez, the new acquisitions, hope so.	\N	\N	2015-04-08 02:35:47.283499	2015-04-08 02:35:47.283499
+738	USA	Kansas City Royals	12	0	2015	Staff ace James Shields is out, but the American League champions are set to defend their title.	\N	\N	2015-04-08 02:35:47.568334	2015-04-08 02:35:47.568334
+739	USA	Toronto Blue Jays	13	0	2015	Catcher Russell Martin and third baseman Josh Donaldson beef up the lineup offensively and defensively.	\N	\N	2015-04-08 02:35:47.834534	2015-04-08 02:35:47.834534
+740	USA	San Diego Padres	14	0	2015	New general manager A.J. Preller remodeled the organization and the outfield with Justin Upton, Matt Kemp and Wil Myers.	\N	\N	2015-04-08 02:35:48.133128	2015-04-08 02:35:48.133128
+741	USA	Baltimore Orioles	15	0	2015	The club loses offense with Cruz and Nick Markakis gone, but it did get Travis Snider.	\N	\N	2015-04-08 02:35:48.39498	2015-04-08 02:35:48.39498
+742	USA	Oakland Athletics	16	0	2015	Will general manager Billy Beanes offseason madness pan out?	\N	\N	2015-04-08 02:35:48.879865	2015-04-08 02:35:48.879865
+743	USA	Miami Marlins	16	0	2015	We can count $325 million reasons why the Marlins will contend.	\N	\N	2015-04-08 02:35:49.185436	2015-04-08 02:35:49.185436
+744	USA	Chicago Cubs	18	0	2015	Starting pitcher Jon Lester, manager Joe Maddon and youth make the team relevant again.	\N	\N	2015-04-08 02:35:49.46537	2015-04-08 02:35:49.46537
+745	USA	Tampa Bay Rays	19	0	2015	How will the Rays do under new management?	\N	\N	2015-04-08 02:35:49.764625	2015-04-08 02:35:49.764625
+746	USA	New York Yankees	20	0	2015	Let the A-Rod drama begin. More important, will the starting rotation hold up?	\N	\N	2015-04-08 02:35:50.06436	2015-04-08 02:35:50.06436
+747	USA	New York Mets	21	0	2015	The pitching staff is solid, but the shortstop position wasnt addressed in the offseason.	\N	\N	2015-04-08 02:35:50.364503	2015-04-08 02:35:50.364503
+748	USA	Cincinnati Reds	22	0	2015	Can the rotation survive the losses of Mat Latos and Alfredo Simon?	\N	\N	2015-04-08 02:35:50.692949	2015-04-08 02:35:50.692949
+749	USA	Milwaukee Brewers	23	0	2015	Will the 2014 collapse down the stretch, which cost them a playoff berth, carry over?	\N	\N	2015-04-08 02:35:50.980288	2015-04-08 02:35:50.980288
+750	USA	Texas Rangers	24	0	2015	The loss of starting pitcher Yu Darvish to Tommy John elbow surgery is a major hurdle.	\N	\N	2015-04-08 02:35:51.248452	2015-04-08 02:35:51.248452
+751	USA	Atlanta Braves	25	0	2015	President of baseball operations John Hart is building for 2017.	\N	\N	2015-04-08 02:35:51.552583	2015-04-08 02:35:51.552583
+752	USA	Houston Astros	26	0	2015	A.J. Hinch, 40, gets his second crack at managing.	\N	\N	2015-04-08 02:35:51.832467	2015-04-08 02:35:51.832467
+753	USA	Minnesota Twins	27	0	2015	A familiar face to manage the team Hall of Famer Paul Molitor.	\N	\N	2015-04-08 02:35:52.10311	2015-04-08 02:35:52.10311
+754	USA	Philadelphia Phillies	28	0	2015	HHow long do starting pitchers Cole Hamels and Cliff Lee and closer Jonathan Papelbon stick around?	\N	\N	2015-04-08 02:35:52.40128	2015-04-08 02:35:52.40128
+755	USA	Colorado Rockies	29	0	2015	Troy Tulowitzki and Carlos Gonzalez survive the offseason, but will they survive the trade deadline?	\N	\N	2015-04-08 02:35:52.687988	2015-04-08 02:35:52.687988
+756	USA	Arizona Diamondbacks	29	0	2015	Tony La Russa and Dave Stewart are in rebuild mode.	\N	\N	2015-04-08 02:35:53.085597	2015-04-08 02:35:53.085597
+757	FOX	Los Angeles Dodgers	1	0	2015	89.8% ... It’s just as well that Clayton Kershaw suffered his meltdown in the top half of the seventh inning in Game 1 of the NLDS in October, as Dodgers fans are used to heading for the exits around then anyway. The Dodgers new regime is hoping that a r	\N	\N	2015-04-08 02:35:58.383199	2015-04-08 02:35:58.383199
+758	FOX	Washington Nationals	2	0	2015	78.3% ... The Nationals generated a ton of trade rumors this offseason after signing Max Scherzer to an already crowded rotation. With none of those trades coming to fruition, we’re left to assume that Mike Rizzo brought in Scherzer to show Stephen Stras	\N	\N	2015-04-08 02:35:58.824064	2015-04-08 02:35:58.824064
+759	FOX	Los Angeles Angels	3	0	2015	67.6% ... While the Angels acquired Matt Joyce as a platoon partner at DH, Josh Hamilton’s absence likely means a full slate of at-bats for the left-hander, at least in the early going. Of course expecting Joyce to hit southpaws is akin to expecting Gran	\N	\N	2015-04-08 02:35:59.260621	2015-04-08 02:35:59.260621
+760	FOX	St. Louis Cardinals	4	0	2015	61.7% ... Known for drafting and developing players who grind a la Joey Knish, the Cardinals’ trade for Jason Heyward proved that they know that while you can’t lose what you don’t put in the middle, you can’t win either. In doing so, the Cardinals showe	\N	\N	2015-04-08 02:35:59.694563	2015-04-08 02:35:59.694563
+761	FOX	Boston Red Sox	5	0	2015	56.4% ... If the Red Sox offense really clicks, they could easily lead the league in runs scored thanks to the additions of Hanley Ramirez and Pablo Sandoval. If the Red Sox pitching staff really clicks, they probably traded for Cole Hamels.	\N	\N	2015-04-08 02:36:00.324172	2015-04-08 02:36:00.324172
+762	FOX	Seattle Mariners	6	0	2015		\N	\N	2015-04-08 02:36:00.618374	2015-04-08 02:36:00.618374
+763	FOX	Tampa Bay Rays	7	0	2015	52.5% ... The Rays might well be the Red Sox inverse, with a rotation full of ceiling and depth and a lineup that could, with the help of your 39 cents per day, score a run this week. How the org responds to the loss of three mainstays (Andrew Friedman, 	\N	\N	2015-04-08 02:36:00.986103	2015-04-08 02:36:00.986103
+764	FOX	Detroit Tigers	8	0	2015	48.7% ... The Tigers, and Detroit in general, might never rebuild in earnest, but failing to pursue Max Scherzer to the fullest extent of their budget could mean that GM Dave Dombrowski realizes it might be time for a soft reset in the next few years. It	\N	\N	2015-04-08 02:36:01.303951	2015-04-08 02:36:01.303951
+765	FOX	Cleveland Indians	9	0	2015	43.0% ... Hopes are high in Cleveland, and for good reason. The Tribe feature a deep lineup, a rotation full of upside, and a veritable cadre of hard-throwing bullpen arms. Which only makes us wonder how Skip Bayless will blame their inevitable choke-job	\N	\N	2015-04-08 02:36:01.668703	2015-04-08 02:36:01.668703
+766	FOX	Chicago Cubs	10	0	2015	38.7% ... Cubs fans will laugh at themselves for their faith in Brett Jackson, Josh Vitters, and Trey McNutt and breathlessly praise Kris Bryant, Addison Russell and Jorge Soler at the same time. The lesson as always? Don’t talk to Cubs fans.	\N	\N	2015-04-08 02:36:02.018571	2015-04-08 02:36:02.018571
+767	FOX	San Diego Padres	11	0	2015	37.0% ... New GM A.J. Preller’s aggressive reconstruction of the Padres roster registered a nine on the Douglas Sea Scale. Of course it was merely a second degree swell in San Diego.	\N	\N	2015-04-08 02:36:02.34519	2015-04-08 02:36:02.34519
+768	FOX	New York Mets	12	0	2015	36.8% ... Since trading Jose Reyes prior to the 2012 season, Sandy Alderson has been looking for a starting shortstop. He’s still 37 years ahead of Moses, and people Iove that guy.	\N	\N	2015-04-08 02:36:02.662284	2015-04-08 02:36:02.662284
+769	FOX	Oakland Athletics	13	0	2015	36.8% ... The gambit that Billy Beane played this offseason was one he’s played before: get younger, cheaper, and deeper, while still remaining competitive. By the same token, he’s taken the team from a 99.3 percent chance of making the playoffs on Sept.	\N	\N	2015-04-08 02:36:02.993832	2015-04-08 02:36:02.993832
+855	Rant	Milwaukee Brewers	22	0	2015	22. Milwaukee Brewers	\N	\N	2015-04-08 02:37:19.860939	2015-04-08 02:37:19.860939
+770	FOX	San Francisco Giants	14	0	2015	34.7% ... They’re probably the second-best team in the division, and despite their three championships in five seasons, there’s as much downside here as ever. The Giants still have Buster Posey though, who, like a British accent, can cover for a multitud	\N	\N	2015-04-08 02:36:03.490582	2015-04-08 02:36:03.490582
+771	FOX	Miami Marlins	15	0	2015	29.8% ... The Marlins actually have a competitive team, which raises the question as to when they’ll trade their core to the Blue Jays.	\N	\N	2015-04-08 02:36:03.95092	2015-04-08 02:36:03.95092
+772	FOX	Toronto Blue Jays	16	0	2015	28.0% ... Active as ever in the offseason, the Jays still managed to enter Spring Training featuring a depth chart that idolized Flat Stanley.	\N	\N	2015-04-08 02:36:04.507025	2015-04-08 02:36:04.507025
+773	FOX	Pittsburgh Pirates	17	0	2015	27.5% ... The Pirates’ offseason centered on re-signing a 38-year-old pitcher who most people forgot left in the first place.	\N	\N	2015-04-08 02:36:05.018873	2015-04-08 02:36:05.018873
+774	FOX	Milwaukee Brewers	18	0	2015	26.9% ... The Brewers are unlikely to find the same success in plastering their major offseason acquisition of 2015 (Adam Lind) on t-shirts and posters as they had last offseason (Hank the Dog).	\N	\N	2015-04-08 02:36:05.395098	2015-04-08 02:36:05.395098
+775	FOX	Chicago White Sox	19	0	2015	26.7% ... The White Sox overhauled the majority of their bullpen and lineup via free agency and trades. They now only need to address their deficiencies at the hot corner, keystone, catcher and the back end of their rotation.	\N	\N	2015-04-08 02:36:05.771874	2015-04-08 02:36:05.771874
+776	FOX	New York Yankees	20	0	2015	22.7% ... The Yankees continue to show remarkable restraint at perhaps the worst times, missing out on Robinson Cano last year while still going over the luxury tax, and then following up by failing to address their leaky rotation outside of adding Natha	\N	\N	2015-04-08 02:36:06.382012	2015-04-08 02:36:06.382012
+777	FOX	Baltimore Orioles	21	0	2015	19.8% ... You’ll forgive the Orioles’ unwillingness to retain the reigning home run champion upon learning that they were in a high-stakes staring contest with the dead goldfish that is the Mariners from November-January. The O’s didn’t win, but they did	\N	\N	2015-04-08 02:36:06.741052	2015-04-08 02:36:06.741052
+778	FOX	Texas Rangers	22	0	2015	16.8% ... I was trying to think of a comment for the Rangers but every time I thought I had something it fell apar- oh I found it.	\N	\N	2015-04-08 02:36:07.22567	2015-04-08 02:36:07.22567
+779	FOX	Houston Astros	23	0	2015	13.6% ... If you truly buy that the emergence of Dallas Keuchel and Collin McHugh were part of a “process,” we have a t-shirt to sell you. Where will Evan Gattis play? How will Mark Appel enrage his teammates? Will Astros hitters break the strikeout reco	\N	\N	2015-04-08 02:36:07.656177	2015-04-08 02:36:07.656177
+780	FOX	Cincinnati Reds	24	0	2015	13.1% ... With a run differential of -17, the 76-86 record Cincinnati compiled last year can be chalked up, at least in part, to some bad luck. After dealing away two-fifths of their starting rotation, though, they’re more likely to earn last year’s reco	\N	\N	2015-04-08 02:36:08.097077	2015-04-08 02:36:08.097077
+781	FOX	Kansas City Royals	25	0	2015	10.2% ... The Death Star and the 2014 Royals have a lot in common: they took a long time to build, they functioned under unconventional management and their Shields failed at inopportune times. If Edinson Volquez and Chris Young don’t produce, the 2015 R	\N	\N	2015-04-08 02:36:08.649866	2015-04-08 02:36:08.649866
+782	FOX	Atlanta Braves	26	0	2015	8.2% ... The Braves underwent a stark transformation this winter, hoping to stockpile talent in the minors and build for the future. Some may consider it intelligent, but the Braves also signed someone who needed neck surgery to a four-year deal and one 	\N	\N	2015-04-08 02:36:08.98627	2015-04-08 02:36:08.98627
+783	FOX	Minnesota Twins	27	0	2015	7.6% ... The Twins shouldn’t be expected to be competitive this season, but what can be expected is for fans to blame whatever goes wrong on Joe Mauer’s lack of leadership and RBI.	\N	\N	2015-04-08 02:36:09.289206	2015-04-08 02:36:09.289206
+784	FOX	Arizona Diamondbacks	28	0	2015	6.9% ... The Diamondbacks remade their rotation over the winter in the same way Domino’s reinvented pasta. Their current and former GMs are living together, but yeah, Justin Upton was the problem.	\N	\N	2015-04-08 02:36:09.633078	2015-04-08 02:36:09.633078
+785	FOX	Colorado Rockies	29	0	2015	4.3% ... Jeff Bridich’s first offseason as GM was a quiet one, though he netted an extra first-round pick thanks to making a Qualifying Offer to Michael Cuddyer. Whether that lack of activity was a good decision will play out in real time, but it’s hard 	\N	\N	2015-04-08 02:36:10.006096	2015-04-08 02:36:10.006096
+786	FOX	Philadelphia Phillies	30	0	2015	2.1% ... Maikel Franco is probably their best option at first base, but don’t get too mad at Ryne Sandberg for overlooking him: You literally can't see Franco standing behind Ryan Howard. That might have been a cheap shot, but at least we went a whole se	\N	\N	2015-04-08 02:36:10.448172	2015-04-08 02:36:10.448172
+788	CBS	Los Angeles Dodgers	2	0	2015	I definitely had them too low last time. The reason was that the bullpen will be very worrisome until Kenley Jansen gets back. That's still the case, but I just downgraded them too much for it.	\N	\N	2015-04-08 02:36:21.851966	2015-04-08 02:36:21.851966
+789	CBS	Pittsburgh Pirates	3	0	2015	I admittedly might still be a bit overzealous on the Pirates, but I like their chances at a deep playoff run this season. When (not if!) Gregory Polanco breaks out, this is the most exciting and maybe even best outfield in baseball.	\N	\N	2015-04-08 02:36:22.301778	2015-04-08 02:36:22.301778
+790	CBS	Seattle Mariners	4	0	2015	Again, I may have been a bit overzealous with the last rankings, but I still think very highly of Seattle this season and it has the potential for a ridiculous playoff rotation if Taijuan Walker pans out like he should.	\N	\N	2015-04-08 02:36:23.724346	2015-04-08 02:36:23.724346
+792	CBS	St. Louis Cardinals	6	0	2015	I know that power is becoming more and more scarce, but it's not outrageous to say the Cardinals might not have a single player hit 20 homers this season. Jhonny Peralta had 21 and Matt Holliday had 20 last year. Matt Adams, Kolten Wong, Jason Heyward al	\N	\N	2015-04-08 02:36:24.702717	2015-04-08 02:36:24.702717
+793	CBS	Detroit Tigers	7	0	2015	Most of the spring injuries have progressed nicely (not all, though, as Justin Verlander will start on the DL), so I'm comfortable with having them at the top of the AL Central again.	\N	\N	2015-04-08 02:36:25.488387	2015-04-08 02:36:25.488387
+794	CBS	Cleveland Indians	8	0	2015	There are lots of reasons to love the Indians this season -- and I do have them as a playoff team -- but the back of the rotation isn't confidence-inspiring for me. The defense is still suspect and can we be sure about repeat performances from Michael Br	\N	\N	2015-04-08 02:36:25.967853	2015-04-08 02:36:25.967853
+795	CBS	Boston Red Sox	9	0	2015	Fearless prediction: Mookie Betts will be the best Mookie in MLB history.	\N	\N	2015-04-08 02:36:26.408757	2015-04-08 02:36:26.408757
+796	CBS	Baltimore Orioles	10	0	2015	I can't put my finger on why, but this is the team I'm least confident in ranking. They seem very unpredictable.	\N	\N	2015-04-08 02:36:27.084542	2015-04-08 02:36:27.084542
+797	CBS	San Francisco Giants	11	0	2015	You guys need to do better than 'keep picking against us, that's how we like it.' That doesn't make sense when you don't actually play for the team and the last two times the Giants won it all, they missed the playoffs the following season. I also think 	\N	\N	2015-04-08 02:36:28.183346	2015-04-08 02:36:28.183346
+798	CBS	Kansas City Royals	12	0	2015	I wonder if they would have been better off not adding Alex Rios and just going with Lorenzo Cain in right field and Jarrod Dyson in center. I'm sure their pitchers wouldn't have minded.	\N	\N	2015-04-08 02:36:28.818105	2015-04-08 02:36:28.818105
+799	CBS	Chicago Cubs	13	0	2015	I still think they're one year away, but that second wild card makes things a lot more workable. [ENTER SCALDING HOT TAKE ON KRIS BRYANT HERE]	\N	\N	2015-04-08 02:36:29.372693	2015-04-08 02:36:29.372693
+800	CBS	Chicago White Sox	14	0	2015	Great extension this spring for Adam Eaton and now the leadoff spot is solidified for the foreseeable future. Rick Hahn just keeps getting better and better.	\N	\N	2015-04-08 02:36:29.875409	2015-04-08 02:36:29.875409
+801	CBS	New York Yankees	15	0	2015	There's actually an awful lot of upside here, but that comes with an inordinate amount of risk, too. For example, what are the odds that Carlos Beltran, Mark Teixeira, A-Rod, Masahiro Tanaka, CC Sabathia and Michael Pineda all avoid the DL all season?	\N	\N	2015-04-08 02:36:30.360156	2015-04-08 02:36:30.360156
+802	CBS	San Diego Padres	16	0	2015	I usually avoid spring stats, but I'm intrigued by Will Middlebrooks playing well. He's still only 26 and was very good as a rookie in 2012. Perhaps the change of scenery (and coasts ... and leagues) turns him around.	\N	\N	2015-04-08 02:36:30.935542	2015-04-08 02:36:30.935542
+803	CBS	Toronto Blue Jays	17	0	2015	Losing Marcus Stroman for the season was a pretty devastating blow. They'll need big years from both Aaron Sanchez and Daniel Norris now.	\N	\N	2015-04-08 02:36:31.438066	2015-04-08 02:36:31.438066
+804	CBS	Miami Marlins	18	0	2015	After the All-Star break last season, leadoff man Dee Gordon had a .300 on-base percentage (the league OBP was .314 last season) with 47 strikeouts and four walks. He stole 21 bases, but was caught stealing 10 times. He was really bad in 2012 and 2013, t	\N	\N	2015-04-08 02:36:32.066729	2015-04-08 02:36:32.066729
+805	CBS	New York Mets	19	0	2015	They will still be better, but losing Zack Wheeler was a tough blow. An intriguing ballclub nonetheless and Matt Harvey is the easiest comeback player of the year pick in recent memory.	\N	\N	2015-04-08 02:36:32.443736	2015-04-08 02:36:32.443736
+806	CBS	Cincinnati Reds	20	0	2015	They lost 827 player games to injury last season. Sure, Mat Latos is gone, but better health from the likes of Homer Bailey (he'll only miss a few starts), Joey Votto, Brandon Phillips et al and better left field play than last season means this team sho	\N	\N	2015-04-08 02:36:32.820802	2015-04-08 02:36:32.820802
+807	CBS	Oakland Athletics	21	0	2015	The A's didn't use a single batting order more than three times last season, which is amazing. Look at the roster now with all the platoon and multi-position guys and it looks like Bob Melvin will have a similarly variable lineup this season.	\N	\N	2015-04-08 02:36:33.20287	2015-04-08 02:36:33.20287
+808	CBS	Milwaukee Brewers	22	0	2015	Great offense, worrisome pitching. I do think Ryan Braun is going to have a big season, which I know makes lots of you scream.	\N	\N	2015-04-08 02:36:33.585798	2015-04-08 02:36:33.585798
+809	CBS	Houston Astros	23	0	2015	They had the worst bullpen in the AL by nearly a half-run last season. Adding Pat Neshek, Luke Gregerson and Joe Thatcher to the mix has perhaps flown too much under the radar nationally.	\N	\N	2015-04-08 02:36:34.093163	2015-04-08 02:36:34.093163
+810	CBS	Minnesota Twins	24	0	2015	Oswaldo Arcia hit 20 homers last season in only 372 at-bats. He's still only 23 years old.	\N	\N	2015-04-08 02:36:34.465559	2015-04-08 02:36:34.465559
+811	CBS	Tampa Bay Rays	25	0	2015	It already looked like a down year, but 60 percent of their best possible rotation is hurt. Needless to say, the post-Maddon era isn't off to a good start.	\N	\N	2015-04-08 02:36:34.833659	2015-04-08 02:36:34.833659
+812	CBS	Colorado Rockies	26	0	2015	Your owner's big offseason addition being Macaroni Grill has to be a bit aggravating, no?	\N	\N	2015-04-08 02:36:35.185084	2015-04-08 02:36:35.185084
+813	CBS	Arizona Diamondbacks	27	0	2015	Generally speaking, 'Josh Collmenter, opening day starter' isn't the precursor of a playoff run.	\N	\N	2015-04-08 02:36:35.825215	2015-04-08 02:36:35.825215
+814	CBS	Texas Rangers	28	0	2015	I was already a bit worried about the lack of bounce-back potential here, but losing Yu Darvish for the season means it's even more an uphill battle.	\N	\N	2015-04-08 02:36:36.166292	2015-04-08 02:36:36.166292
+815	CBS	Atlanta Braves	29	0	2015	I like Julio Teheran and Alex Wood atop the rotation, so there's that.	\N	\N	2015-04-08 02:36:36.521989	2015-04-08 02:36:36.521989
+816	CBS	Philadelphia Phillies	30	0	2015	The good news is that they'll be selling hard liquor in Citizens Bank Park this season.	\N	\N	2015-04-08 02:36:36.842427	2015-04-08 02:36:36.842427
+817	BR	Colorado Rockies	30	0	2015	With the 2014 <a href="http://bleacherreport.com/mlb">MLB</a> winter meetings now in the rearview, it's time to take a look at how a busy four days in San Diego may have changed the landscape of the league looking ahead to the 2015 season.A whopping seve	\N	\N	2015-04-08 02:36:47.391786	2015-04-08 02:36:47.391786
+818	BR	Philadelphia Phillies	29	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>It was a quiet winter meetings for the Colorado Rockies, though there still stands at least a chance the team trades for Mets right-hander Dillon Gee, according to <a href="http://espn.go.com/	\N	\N	2015-04-08 02:36:47.876309	2015-04-08 02:36:47.876309
+819	BR	Minnesota Twins	28	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>It's not a full-scale rebuild just yet, but the winter meetings were a step in the right direction for the Philadelphia Phillies, as they traded veteran shortstop Jimmy Rollins and reliever An	\N	\N	2015-04-08 02:36:48.431781	2015-04-08 02:36:48.431781
+820	BR	Texas Rangers	27	0	2015	<strong>Post-Winter Meetings Outlook</strong>For the second straight offseason, the Minnesota Twins set a new record for largest free-agent contract in franchise history, as they <a href="http://www.startribune.com/sports/twins/blogs/285519081.html">sign	\N	\N	2015-04-08 02:36:48.967393	2015-04-08 02:36:48.967393
+821	BR	Arizona Diamondbacks	26	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>It was a quiet winter meetings for the Texas Rangers, though they did land left-hander Ross Detwiler in a trade with the Washington Nationals on Thursday, according to <a href="https://twitter	\N	\N	2015-04-08 02:36:49.469053	2015-04-08 02:36:49.469053
+822	BR	Houston Astros	25	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>After making a pair of significant additions early in the offseason with the signing of Yasmany Tomas and acquisition of Jeremy Hellickson, the Arizona Diamondbacks made a big subtraction at t	\N	\N	2015-04-08 02:36:49.985127	2015-04-08 02:36:49.985127
+823	BR	Tampa Bay Rays	24	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>It's never a bad idea to back a young rotation with a proven veteran bullpen, and the Houston Astros made it clear early on this offseason, when they made a run at Andrew Miller, that upgradin	\N	\N	2015-04-08 02:36:50.567916	2015-04-08 02:36:50.567916
+824	BR	Cincinnati Reds	23	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>The Tampa Bay Rays have been quiet since freeing up some payroll space by trading away Jeremy Hellickson, Sean Rodriguez and Joel Peralta earlier this offseason.Chances are they will use that 	\N	\N	2015-04-08 02:36:51.649642	2015-04-08 02:36:51.649642
+825	BR	San Diego Padres	22	0	2015	<strong><strong><strong>Post-Winter Meetings Outlook</strong></strong></strong>Trading off one or more of their upcoming free-agent starters was a move that had to be made by the Cincinnati Reds, and it netted a pair of solid pitching prospects in Anthon	\N	\N	2015-04-08 02:36:52.162531	2015-04-08 02:36:52.162531
+857	Rant	Atlanta Braves	20	0	2015	20. Atlanta Braves	\N	\N	2015-04-08 02:37:20.484272	2015-04-08 02:37:20.484272
+858	Rant	New York Mets	19	0	2015	19. New York Mets	\N	\N	2015-04-08 02:37:20.751946	2015-04-08 02:37:20.751946
+826	BR	Atlanta Braves	21	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>No one is going to confuse them with the 1927 Yankees, but adding Matt Kemp to the lineup certainly puts the San Diego Padres in a much better position offensively heading into the 2015 season	\N	\N	2015-04-08 02:36:53.100461	2015-04-08 02:36:53.100461
+827	BR	New York Yankees	20	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>The Atlanta Braves managed to plug the hole at second base with veteran Alberto Callaspo, and at this point Justin Upton is still around, so for the time being they actually move up a spot in 	\N	\N	2015-04-08 02:36:53.67288	2015-04-08 02:36:53.67288
+828	BR	Oakland Athletics	19	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>A potential reunion with Chase Headley is still on the table for the New York Yankees, but that could hurt the team's chances of improving the rotation, according to Joel Sherman of the&nbsp;<	\N	\N	2015-04-08 02:36:54.221992	2015-04-08 02:36:54.221992
+829	BR	Cleveland Indians	18	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>Add Jeff Samardzija to the list of key pieces the Oakland Athletics have shipped out this winter, alongside All-Stars Josh Donaldson and Brandon Moss, as the big right-hander was traded to the	\N	\N	2015-04-08 02:36:54.704085	2015-04-08 02:36:54.704085
+830	BR	San Francisco Giants	17	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>While other teams have climbed up the rankings as they piece together more complete rosters, the Cleveland Indians have slipped down several spots with Brandon Moss still ranking as their only	\N	\N	2015-04-08 02:36:55.185233	2015-04-08 02:36:55.185233
+831	BR	New York Mets	16	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>San Francisco Giants fans won't like this one bit, but after missing out on Jon Lester and failing to make any significant moves at the winter meetings, the team slides down the rankings even 	\N	\N	2015-04-08 02:36:55.687001	2015-04-08 02:36:55.687001
+832	BR	Boston Red Sox	15	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>All signs point to the New York Mets opening the 2015 season with Wilmer Flores as the everyday shortstop, so at this point there is a good chance no more significant additions are made betwee	\N	\N	2015-04-08 02:36:56.464354	2015-04-08 02:36:56.464354
+833	BR	Kansas City Royals	14	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>Adding Rick Porcello, Justin Masterson and potentially Wade Miley to the rotation is enough for the Boston Red Sox to climb a few spots up the rankings, but it hardly offsets missing out on Jo	\N	\N	2015-04-08 02:36:56.929222	2015-04-08 02:36:56.929222
+834	BR	Chicago White Sox	13	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>Many pointed to the Kansas City Royals' decision to decline their option on Billy Butler as the team looking for more versatility and trying to get away from a DH-only player. However, the sig	\N	\N	2015-04-08 02:36:57.708814	2015-04-08 02:36:57.708814
+835	BR	Milwaukee Brewers	12	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>It should be an exciting summer in Chicago, as the Cubs were not the only team that was busy at the winter meetings, with the White Sox adding Jeff Samardzija and David Robertson to what was a	\N	\N	2015-04-08 02:36:58.431371	2015-04-08 02:36:58.431371
+836	BR	Chicago Cubs	11	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>The Milwaukee Brewers were expectedly quiet at the winter meetings, as they really don't have much to take care of between now and the start of the season.Their only significant free agents we	\N	\N	2015-04-08 02:36:58.91303	2015-04-08 02:36:58.91303
+837	BR	Pittsburgh Pirates	10	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>For Cubs fans, the Jon Lester signing was like Christmas morning. As new manager Joe Maddon put it, the team "<a href="http://www.usatoday.com/story/sports/mlb/2014/12/10/jon-lester-chicago-cu	\N	\N	2015-04-08 02:36:59.419197	2015-04-08 02:36:59.419197
+838	BR	Baltimore Orioles	9	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>While the Jon Lester signing was obviously huge for the Chicago Cubs, a case can be made that the Pittsburgh Pirates re-signing Francisco Liriano was equally as important.Losing Russell Martin	\N	\N	2015-04-08 02:36:59.929629	2015-04-08 02:36:59.929629
+839	BR	Detroit Tigers	8	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>Losing Nelson Cruz and Nick Markakis is obviously a blow to the Baltimore Orioles offensive attack, but the returns of Manny Machado and Matt Wieters should help replace some of that lost prod	\N	\N	2015-04-08 02:37:01.005761	2015-04-08 02:37:01.005761
+840	BR	Seattle Mariners	7	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>Already one of the more potent offensive teams in baseball, the Detroit Tigers just got a little scarier for opposing pitchers with the addition of Yoenis Cespedes to the middle of the order.H	\N	\N	2015-04-08 02:37:01.730036	2015-04-08 02:37:01.730036
+841	BR	Miami Marlins	6	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>The Nelson Cruz signing was a huge win for the Seattle Mariners, and it may very well be enough to get them over the hump and into the postseason after they missed out by just one game a year 	\N	\N	2015-04-08 02:37:02.39721	2015-04-08 02:37:02.39721
+842	BR	Toronto Blue Jays	5	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>At first blush, the No. 6 spot probably seems entirely too high for the Miami Marlins. Keep in mind that these offseason power rankings are all about who has the best roster at this moment in 	\N	\N	2015-04-08 02:37:02.878693	2015-04-08 02:37:02.878693
+843	BR	Los Angeles Dodgers	4	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>The Toronto Blue Jays may not have made any significant additions at the winter meetings, but the Boston Red Sox missing out on Jon Lester while the Baltimore Orioles and New York Yankees both	\N	\N	2015-04-08 02:37:03.364503	2015-04-08 02:37:03.364503
+844	BR	Los Angeles Angels	3	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>New President of Baseball Operations Andrew Friedman is not shy about pulling the trigger on a trade, that much is for sure, as he was wheeling and dealing over the four-day extravaganza that 	\N	\N	2015-04-08 02:37:04.098176	2015-04-08 02:37:04.098176
+845	BR	St. Louis Cardinals	2	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>Trading Howie Kendrick was no doubt a tough decision for the Los Angeles Angels, but it netted them one of the better pitching prospects in the game in Andrew Heaney, who should immediately st	\N	\N	2015-04-08 02:37:04.815896	2015-04-08 02:37:04.815896
+846	BR	Washington Nationals	1	0	2015	<strong><strong>Post-Winter Meetings Outlook</strong></strong>The St. Louis Cardinals jump the Los Angeles Angels into the No. 2 spot, as the Angels' trade of Howie Kendrick helps them long term but could be a hit short term.With right field upgraded and	\N	\N	2015-04-08 02:37:05.95248	2015-04-08 02:37:05.95248
+847	Rant	Colorado Rockies	30	0	2015	30. Colorado Rockies	\N	\N	2015-04-08 02:37:16.042315	2015-04-08 02:37:16.042315
+848	Rant	Philadelphia Phillies	29	0	2015	29. Philadelphia Phillies	\N	\N	2015-04-08 02:37:16.772005	2015-04-08 02:37:16.772005
+849	Rant	Tampa Bay Rays	28	0	2015	28. Tampa Bay Rays	\N	\N	2015-04-08 02:37:17.232828	2015-04-08 02:37:17.232828
+850	Rant	Cincinnati Reds	27	0	2015	27. Cincinnati Reds	\N	\N	2015-04-08 02:37:17.705836	2015-04-08 02:37:17.705836
+851	Rant	Texas Rangers	26	0	2015	26. Texas Rangers	\N	\N	2015-04-08 02:37:18.103811	2015-04-08 02:37:18.103811
+852	Rant	Houston Astros	25	0	2015	25. Houston Astros	\N	\N	2015-04-08 02:37:18.576346	2015-04-08 02:37:18.576346
+853	Rant	Minnesota Twins	24	0	2015	24. Minnesota Twins	\N	\N	2015-04-08 02:37:19.000175	2015-04-08 02:37:19.000175
+854	Rant	Arizona Diamondbacks	23	0	2015	23. Arizona Diamondbacks	\N	\N	2015-04-08 02:37:19.603766	2015-04-08 02:37:19.603766
+859	Rant	San Diego Padres	18	0	2015	18. San Diego Padres	\N	\N	2015-04-08 02:37:20.99343	2015-04-08 02:37:20.99343
+860	Rant	New York Yankees	17	0	2015	17. New York Yankees	\N	\N	2015-04-08 02:37:21.251489	2015-04-08 02:37:21.251489
+861	Rant	Chicago Cubs	16	0	2015	16. Chicago Cubs	\N	\N	2015-04-08 02:37:21.501214	2015-04-08 02:37:21.501214
+862	Rant	Chicago White Sox	15	0	2015	15. Chicago White Sox	\N	\N	2015-04-08 02:37:21.75932	2015-04-08 02:37:21.75932
+863	Rant	Kansas City Royals	14	0	2015	14. Kansas City Royals	\N	\N	2015-04-08 02:37:22.025382	2015-04-08 02:37:22.025382
+864	Rant	Miami Marlins	13	0	2015	13. Miami Marlins	\N	\N	2015-04-08 02:37:22.315243	2015-04-08 02:37:22.315243
+865	Rant	Oakland Athletics	12	0	2015	12. Oakland Athletics	\N	\N	2015-04-08 02:37:22.567209	2015-04-08 02:37:22.567209
+866	Rant	Baltimore Orioles	11	0	2015	11. Baltimore Orioles	\N	\N	2015-04-08 02:37:22.846439	2015-04-08 02:37:22.846439
+867	Rant	Boston Red Sox	10	0	2015	10. Boston Red Sox	\N	\N	2015-04-08 02:37:23.115334	2015-04-08 02:37:23.115334
+868	Rant	Toronto Blue Jays	9	0	2015	9. Toronto Blue Jays	\N	\N	2015-04-08 02:37:23.401166	2015-04-08 02:37:23.401166
+869	Rant	Washington Nationals	8	0	2015	8. Washington Nationals	\N	\N	2015-04-08 02:37:23.653808	2015-04-08 02:37:23.653808
+870	Rant	Pittsburgh Pirates	7	0	2015	7. Pittsburgh Pirates	\N	\N	2015-04-08 02:37:23.939192	2015-04-08 02:37:23.939192
+871	Rant	Seattle Mariners	6	0	2015	6. Seattle Mariners	\N	\N	2015-04-08 02:37:24.257507	2015-04-08 02:37:24.257507
+872	Rant	San Francisco Giants	5	0	2015	5. San Francisco Giants	\N	\N	2015-04-08 02:37:24.576603	2015-04-08 02:37:24.576603
+873	Rant	St. Louis Cardinals	4	0	2015	4. St. Louis Cardinals	\N	\N	2015-04-08 02:37:24.819871	2015-04-08 02:37:24.819871
+874	Rant	Detroit Tigers	3	0	2015	3. Detroit Tigers	\N	\N	2015-04-08 02:37:25.064374	2015-04-08 02:37:25.064374
+875	Rant	Los Angeles Angels	2	0	2015	2. Los Angeles Angels	\N	\N	2015-04-08 02:37:25.33251	2015-04-08 02:37:25.33251
+876	Rant	Los Angeles Dodgers	1	0	2015	1. Los Angeles Dodgers	\N	\N	2015-04-08 02:37:25.653761	2015-04-08 02:37:25.653761
+\.
+
+
+--
+-- Name: ranks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tcrosley
+--
+
+SELECT pg_catalog.setval('ranks_id_seq', 1206, true);
+
+
+--
+-- Data for Name: schema_migrations; Type: TABLE DATA; Schema: public; Owner: tcrosley
+--
+
+COPY schema_migrations (version) FROM stdin;
+20140707111715
+20150407065612
+20150407065731
+20150407072011
+20150407165830
+\.
+
+
+--
+-- Data for Name: scrape_configs; Type: TABLE DATA; Schema: public; Owner: tcrosley
+--
+
+COPY scrape_configs (id, website, url, rank_xpath, rank_regex, team_xpath, team_regex, description_xpath, description_regex, update_checker_xpath, update_checker_regex, week, year, created_at, updated_at) FROM stdin;
+14	ESPN	http://espn.go.com/mlb/powerrankings	//*[@id='content']/div[2]/div/div[2]/div[1]/table//td[1][@class = 'pr-rank']	([0-9]+)	//*[@id='content']/div[2]/div/div[2]/div[1]/table//td[2]/div/a	>(.*)<	(//*[@id='content']/div[2]/div/div[2]/div[1]/table/tbody//td[4])[position() > 1]	>\\s*(.*)\\s*<	//*[@id='content']/div[2]/div/div[1]/div[1]/div[2]/div	(.*)	1	2015	2015-04-08 04:18:22.055062	2015-04-08 04:18:22.055062
+15	USA	http://www.usatoday.com/sports/mlb/rankings/	//*[@id='power-rankings']/table//td[1]	>\\s*(.*)\\s*<	//*[@id='power-rankings']/table/tbody//td[2]/a/span[3]	>(.*)<	//*[@class='notes']	>\\s*(.*)\\s*<	//*[@id='section_sports']/div[2]/div[1]/div/h3/span	(.*)	1	2015	2015-04-08 04:19:26.050533	2015-04-08 04:19:26.050533
+16	FOX	http://www.foxsports.com/mlb/power-rankings	//*[@id='wisfb_powerRankingsFullPage']/table//td[1]/div[1]/span	([0-9]+)	//*[@id='wisfb_powerRankingsFullPage']/table//td[3]/div/div/a[1]/span[2]	>(.*)<	//*[@class='wisfb_teamDetailsLarge']/span	>[\\s.]*(.*)<	//*[@id='wisfb_pageDetails']/h1/span[1]	(.*)	1	2015	2015-04-08 04:21:18.254963	2015-04-08 04:21:18.254963
+19	Rant	http://www.rantsports.com/mlb/2015/03/30/mlb-power-rankings-2015-preseason-edition/	(//*[@id='content-wrap']/div[1]/section/div/div[2]/div//div[5]/div/h2)[position() > 1 and position() mod 2 = 1]	([0-9]+)\\.\\s	(//*[@id='content-wrap']/div[1]/section/div/div[2]/div//div[5]/div/h2)[position() > 1 and position() mod 2 = 1]	[0-9]+\\.\\s(.*)<	(//*[@id='content-wrap']/div[1]/section/div/div[2]/div//div[5]/div/h2)[position() > 1 and position() mod 2 = 1]	>(.*)<	//*[@id='single-main']/header/p/time	(.*)	1	2015	2015-04-08 04:30:04.604826	2015-04-08 04:30:09.908885
+17	BR	http://bleacherreport.com/articles/2419002-mlb-power-rankings-who-is-baseballs-no-1-team-on-opening-day	//*[@id='article-slider']/article/div//header/div/h2	>([0-9]+)\\.\\s	//*[@id='article-slider']/article/div//header/div/h2	[0-9]+\\. (.*)<	//*[@class='article_body cf']	>(.*)<	//*[@id='article-slider']/article/header/h4/time	(.*)	1	2015	2015-04-08 04:25:59.590407	2015-04-08 04:54:48.00893
+7	BI	http://www.businessinsider.com/mlb-power-rankings-opening-day-2015-4?op=1	(//*[@id='content']/div[2]//h3)[position() <= 30]	>(.*)\\.	(//*[@id='content']/div[2]//h3)[position() <= 30]	\\.(.*)\\(	//*[@id='content']/div[2]//div/p[5]	>(.*)<	//*[@id='content']/div[1]/div[1]/div[2]/div[2]/ul/li[1]	>(.*)<	0	2015	2015-04-07 17:34:31.439231	2015-04-08 01:31:19.72475
+8	ESPN	http://espn.go.com/mlb/powerrankings	//*[@id='content']/div[2]/div/div[2]/div[1]/table//td[1][@class = 'pr-rank']	([0-9]+)	//*[@id='content']/div[2]/div/div[2]/div[1]/table//td[2]/div/a	>(.*)<	(//*[@id='content']/div[2]/div/div[2]/div[1]/table/tbody//td[4])[position() > 1]	>\\s*(.*)\\s*<	//*[@id='content']/div[2]/div/div[1]/div[1]/div[2]/div	(.*)	0	2015	2015-04-07 17:39:01.940822	2015-04-08 01:31:55.374727
+2	USA	http://www.usatoday.com/sports/mlb/rankings/	//*[@id='power-rankings']/table//td[1]	>\\s*(.*)\\s*<	//*[@id='power-rankings']/table/tbody//td[2]/a/span[3]	>(.*)<	//*[@class='notes']	>\\s*(.*)\\s*<	//*[@id='section_sports']/div[2]/div[1]/div/h3/span	(.*)	0	2015	2015-04-07 17:17:39.138871	2015-04-08 01:27:19.267878
+4	FOX	http://www.foxsports.com/mlb/power-rankings	//*[@id='wisfb_powerRankingsFullPage']/table//td[1]/div[1]/span	([0-9]+)	//*[@id='wisfb_powerRankingsFullPage']/table//td[3]/div/div/a[1]/span[2]	>(.*)<	//*[@class='wisfb_teamDetailsLarge']/span	>[\\s.]*(.*)<	//*[@id='wisfb_pageDetails']/h1/span[1]	(.*)	0	2015	2015-04-07 17:25:27.181603	2015-04-08 01:27:40.876437
+3	CBS	http://www.cbssports.com/mlb/powerrankings	//*[@id='storyContent']/article/div[3]/table//td[1]	([0-9]+)	//*[@id='storyContent']/article/div[3]/table//td[2]/a/img	\\w\\w++(?=\\.png)	//*[@id='storyContent']/article/div[3]/table/tbody//td[3]	>(.*)<	//*[@id='storyContent']/article/header/time	>(.*)<	0	2015	2015-04-07 17:23:36.358949	2015-04-08 01:28:46.872902
+5	BR	http://bleacherreport.com/articles/2296284-mlb-power-rankings-how-the-winter-meetings-changed-leagues-balance-of-power/page/2	//*[@id='article-slider']/article/div//header/div/h2	>([0-9]+)\\.\\s	//*[@id='article-slider']/article/div//header/div/h2	[0-9]+\\. (.*) \\(	//*[@class='article_body cf']	>(.*)<	//*[@id='article-slider']/article/header/h4/time	(.*)	0	2015	2015-04-07 17:30:26.814808	2015-04-08 01:31:02.035207
+6	Rant	http://www.rantsports.com/mlb/2014/12/13/mlb-power-rankings-post-winter-meetings-edition/#slide_2	(//*[@id='content-wrap']/div[1]/section/div/div[2]/div//div[5]/div/h2)[position() > 1 and position() mod 2 = 1]	([0-9]+)\\.\\s	(//*[@id='content-wrap']/div[1]/section/div/div[2]/div//div[5]/div/h2)[position() > 1 and position() mod 2 = 1]	[0-9]+\\.\\s(.*)<	(//*[@id='content-wrap']/div[1]/section/div/div[2]/div//div[5]/div/h2)[position() > 1 and position() mod 2 = 1]	>(.*)<	//*[@id='single-main']/header/p/time	(.*)	0	2015	2015-04-07 17:32:35.029003	2015-04-08 02:07:01.837566
+1	MLB	http://m.mlb.com/power-rankings	//*[@id='experts-section']/ul//em	>(.*)<	//*[@id='experts-section']/ul//strong	>(.*)<	//*[@id='experts-section']/ul//div[2]/span	>(.*)<	//*[@id='updateInfo']/p[1]	>(.*)<	0	2015	2015-04-07 17:15:14.299001	2015-04-08 03:18:01.430706
+13	BI	http://www.businessinsider.com/mlb-power-rankings-opening-day-2015-4?op=1	(//*[@id='content']/div[2]//h3)[position() <= 30]	>(.*)\\.	(//*[@id='content']/div[2]//h3)[position() <= 30]	\\.(.*)\\(	//*[@id='content']/div[2]//div/p[5]	>(.*)<	//*[@id='content']/div[1]/div[1]/div[2]/div[2]/ul/li[1]	>(.*)<	1	2015	2015-04-08 03:54:30.524674	2015-04-08 03:54:30.524674
+18	CBS	http://www.cbssports.com/mlb/powerrankings	//*[@id='storyContent']/article/div[3]/table//td[1]	([0-9]+)	//*[@id='storyContent']/article/div[3]/table//td[2]/a/img	\\w\\w++(?=\\.png)	//*[@id='storyContent']/article/div[3]/table/tbody//td[3]	>(.*)<	//*[@id='storyContent']/article/header/time	>(.*)<	1	2015	2015-04-08 04:27:34.840747	2015-04-08 04:27:34.840747
+20	MLB	http://m.mlb.com/power-rankings	//*[@id='experts-section']/ul//em	>(.*)<	//*[@id='experts-section']/ul//strong	>(.*)<	//*[@id='experts-section']/ul//div[2]/span	>(.*)<	//*[@id='updateInfo']/p[1]	>(.*)<	1	2015	2015-04-08 04:30:50.155354	2015-04-08 04:30:50.155354
+\.
+
+
+--
+-- Name: scrape_configs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tcrosley
+--
+
+SELECT pg_catalog.setval('scrape_configs_id_seq', 20, true);
+
+
+--
+-- Data for Name: widgets; Type: TABLE DATA; Schema: public; Owner: tcrosley
+--
+
+COPY widgets (id, name, description, stock, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Name: widgets_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tcrosley
+--
+
+SELECT pg_catalog.setval('widgets_id_seq', 1, false);
+
+
+--
+-- Name: images_pkey; Type: CONSTRAINT; Schema: public; Owner: tcrosley; Tablespace: 
+--
+
+ALTER TABLE ONLY images
+    ADD CONSTRAINT images_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: publish_checkers_pkey; Type: CONSTRAINT; Schema: public; Owner: tcrosley; Tablespace: 
+--
+
+ALTER TABLE ONLY publish_checkers
+    ADD CONSTRAINT publish_checkers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ranks_pkey; Type: CONSTRAINT; Schema: public; Owner: tcrosley; Tablespace: 
+--
+
+ALTER TABLE ONLY ranks
+    ADD CONSTRAINT ranks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: scrape_configs_pkey; Type: CONSTRAINT; Schema: public; Owner: tcrosley; Tablespace: 
+--
+
+ALTER TABLE ONLY scrape_configs
+    ADD CONSTRAINT scrape_configs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: widgets_pkey; Type: CONSTRAINT; Schema: public; Owner: tcrosley; Tablespace: 
+--
+
+ALTER TABLE ONLY widgets
+    ADD CONSTRAINT widgets_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: tcrosley; Tablespace: 
+--
+
+CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: tcrosley
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM tcrosley;
+GRANT ALL ON SCHEMA public TO tcrosley;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

@@ -1,0 +1,27 @@
+<h1>Listing keyvals</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Value</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @keyvals.each do |keyval| %>
+      <tr>
+        <td><%= keyval.key %></td>
+        <td><%= keyval.value %></td>
+        <td><%= link_to 'Show', keyval %></td>
+        <td><%= link_to 'Edit', edit_keyval_path(keyval) %></td>
+        <td><%= link_to 'Destroy', keyval, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Keyval', new_keyval_path %>

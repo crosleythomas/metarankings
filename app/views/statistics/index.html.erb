@@ -1,0 +1,37 @@
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+
+      // Load the Visualization API and the piechart package.
+      google.load('visualization', '1.0', {'packages':['corechart']});
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      
+	  google.load("visualization", "1", {packages:["table"]});
+      google.setOnLoadCallback(drawTable);
+
+      function drawTable() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Website');
+        data.addColumn('number', 'Average Movement');
+        data.addRows([
+        	<% @avg_moves.each do |team, rank, index| %>
+        		<% if index != @avg_moves.size - 1 %>
+        			['<%=team%>',  <%=rank%>],
+        		<% end %>
+        	<% end %>
+        ]);
+        data.sort(1);
+        var table = new google.visualization.Table(document.getElementById('table_div'));
+
+        table.draw(data, {});
+      }
+</script>
+
+<h1>
+	Statistics
+</h1>
+
+<div id="table_div">
+</div>

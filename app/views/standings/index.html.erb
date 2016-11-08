@@ -1,0 +1,35 @@
+<h1>Listing standings</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Team</th>
+      <th>Week</th>
+      <th>Year</th>
+      <th>Wins</th>
+      <th>Losses</th>
+      <th>Percentage</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @standings.each do |standing| %>
+      <tr>
+        <td><%= standing.team %></td>
+        <td><%= standing.week %></td>
+        <td><%= standing.year %></td>
+        <td><%= standing.wins %></td>
+        <td><%= standing.losses %></td>
+        <td><%= standing.percentage %></td>
+        <td><%= link_to 'Show', standing %></td>
+        <td><%= link_to 'Edit', edit_standing_path(standing) %></td>
+        <td><%= link_to 'Destroy', standing, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Standing', new_standing_path %>

@@ -1,0 +1,209 @@
+<style type="text/css">
+  body {
+    background-image: url(/assets/mlb-background-image.jpg);
+  }
+
+  table {
+    background-color: white;
+  }
+
+  h1 {
+    text-align: center;
+    color: burlywood;
+  }
+
+  tr {
+    text-decoration: center;
+  }
+  th {
+    width: 11%;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  td {
+    text-align: center;
+  }
+
+  header {
+    margin-bottom: 60px;
+    background-color: #4b2e83;
+  }
+
+  .rank-num {
+    font-weight: bold;
+  }
+
+  .navbar-brand {
+    color: white;
+  }
+
+  #description_container {
+    padding: 8px;
+    background-color: white;
+    min-height: 250px;
+  }
+
+  #right_col_container {
+    position: fixed;
+    top: 60px;
+    bottom: 40px;
+  }
+
+</style>
+
+<script>
+  function highlightTeam(element) {
+    console.log(element);
+    var class_str = element.getAttribute("data-team-name");
+    var images = document.querySelectorAll("." + class_str);
+    for (var i = 0; i < images.length; i++) {
+      images[i].style.border = "2px solid grey";
+    }
+    var desc_disp = document.getElementById("description_display");
+    desc_disp.innerHTML = element.getAttribute("data-description");
+  }
+
+  function unhighlightTeam(element) {
+    var class_str = element.getAttribute("data-team-name");
+    var images = document.querySelectorAll("." + class_str);
+    for (var i = 0; i < images.length; i++) {
+      images[i].style.border = "";
+    }
+    var desc_disp = document.getElementById("description_display");
+    desc_disp.innerHTML = "";
+  }
+
+  function changeWeek() {
+    window.location = "localhost:3000/index?week="
+  }
+</script>
+
+<div class="container">
+
+  <div class="row col-lg-12">
+    <div class="col-lg-9" id="table_div">
+      <table class="row table col-sm-12">
+
+        <tr class="row">
+          <th class="table_header">Rank</th>
+          <th class="table_header"><a href="http://www.cbssports.com/mlb/powerrankings">CBS</a></th>
+          <th class="table_header"><a href="http://www.foxsports.com/mlb/power-rankings">FOX Sports</a></th>
+          <th class="table_header"><a href="http://espn.go.com/mlb/powerrankings">ESPN</a></th>
+          <th class="table_header"><a href="http://www.usatoday.com/sports/mlb/rankings/">USA</a></th>
+          <th class="table_header"><a href="http://bleacherreport.com/articles/2334180-mlb-power-rankings-how-max-scherzer-to-nationals-shakes-up-the-league">Bleacher Report</a></th>
+          <th class="table_header"><a href="http://www.rantsports.com/mlb/teams/mlb-power-rankings-2/?articleID=289804">Rant Sports</a></th>
+          <th class="table_header"><a href="http://m.mlb.com/power-rankings">MLB.com</a></th>
+        </tr>
+
+        <% for i in 1..30 %>
+        <tr class="row">
+          <td class="rank-num col-sm-1"><%= i %></td> <!--Team Name-->
+          <td class="col-sm-1">
+            <% if !@CBS_ranks[i].nil? %>
+            <span>
+              <img data-description="<%=@CBS_ranks[i][1]%>" data-team-name="<%=@CBS_ranks[i][0].gsub('.', '').gsub(' ', '_')%>_img" class="img-responsive img-thumbnail img-thumbnail <%=@CBS_ranks[i][0].gsub('.', '').gsub(' ', '_')%>_img" onmouseover="highlightTeam(this)" onmouseout="unhighlightTeam(this)" src="<%= @images[@CBS_ranks[i][0]] %>">
+            </span>
+            <% else %>
+            <span>
+              <img class="img-responsive img-thumbnail img-thumbnail" src="<%= @images["empty"] %>">
+            </span>
+            <% end %>
+          </td>
+
+          <td class="col-sm-1">
+            <% if !@FOX_ranks[i].nil? %>
+            <span>
+              <img data-description="<%=@FOX_ranks[i][1]%>" data-team-name="<%=@FOX_ranks[i][0].gsub('.', '').gsub(' ', '_')%>_img" class="img-responsive img-thumbnail <%=@FOX_ranks[i][0].gsub('.', '').gsub(' ', '_')%>_img" onmouseover="highlightTeam(this)" onmouseout="unhighlightTeam(this)" src="<%= @images[@FOX_ranks[i][0]] %>">
+            </span>
+            <% else %>
+            <span>
+              <img class="img-responsive img-thumbnail img-thumbnail" src="<%= @images["empty"] %>">
+            </span>
+            <% end %>
+
+          </td>
+          
+          <td class="col-sm-1">
+            <% if !@ESPN_ranks[i].nil? %>
+            <span>
+              <img data-description="<%=@ESPN_ranks[i][1]%>" data-team-name="<%=@ESPN_ranks[i][0].gsub('.', '').gsub(' ', '_')%>_img" class="img-responsive img-thumbnail <%=@ESPN_ranks[i][0].gsub('.', '').gsub(' ', '_')%>_img" onmouseover="highlightTeam(this)" onmouseout="unhighlightTeam(this)" src="<%= @images[@ESPN_ranks[i][0]] %>">
+            </span>
+            <% else %>
+            <span>
+              <img class="img-responsive img-thumbnail img-thumbnail" src="<%= @images["empty"] %>">
+            </span>            
+            <% end %>
+          </td>
+          
+          <td class="col-sm-1">
+            <% if !@USA_ranks[i].nil? %>
+            <span>
+              <img data-description="<%=@USA_ranks[i][1]%>" data-team-name="<%=@USA_ranks[i][0].gsub('.', '').gsub(' ', '_')%>_img" class="img-responsive img-thumbnail <%=@USA_ranks[i][0].gsub('.', '').gsub(' ', '_')%>_img" onmouseover="highlightTeam(this)" onmouseout="unhighlightTeam(this)" src="<%= @images[@USA_ranks[i][0]] %>">
+            </span>
+            <% else %>
+            <span>
+              <img class="img-responsive img-thumbnail img-thumbnail" src="<%= @images["empty"] %>">
+            </span>
+            <% end %>
+          </td>
+          
+          <td class="col-sm-1">
+            <% if !@BR_ranks[i].nil? %>
+            <span>
+              <img data-description="<%=@BR_ranks[i][1]%>" data-team-name="<%=@BR_ranks[i][0].gsub('.', '').gsub(' ', '_')%>_img" class="img-responsive img-thumbnail <%=@BR_ranks[i][0].gsub('.', '').gsub(' ', '_')%>_img" onmouseover="highlightTeam(this)" onmouseout="unhighlightTeam(this)" src="<%= @images[@BR_ranks[i][0]] %>">
+            </span>
+            <% else %>
+            <span>
+              <img class="img-responsive img-thumbnail img-thumbnail" src="<%= @images["empty"] %>">
+            </span>
+            <% end %>
+          </td>
+          
+          <td class="col-sm-1">
+            <% if !@Rant_ranks[i].nil? %>
+            <span>
+              <img data-description="<%=@Rant_ranks[i][1]%>" data-team-name="<%=@Rant_ranks[i][0].gsub('.', '').gsub(' ', '_')%>_img" class="img-responsive img-thumbnail <%=@Rant_ranks[i][0].gsub('.', '').gsub(' ', '_')%>_img" onmouseover="highlightTeam(this)" onmouseout="unhighlightTeam(this)" src="<%= @images[@Rant_ranks[i][0]] %>">
+            </span>
+            <% else %>
+            <span>
+              <img class="img-responsive img-thumbnail img-thumbnail" src="<%= @images["empty"] %>">
+            </span>
+            <% end %>
+          </td>
+
+          <td class="col-sm-1">
+            <% if !@MLB_ranks[i].nil? %>
+            <span>
+             <img data-description="<%=@MLB_ranks[i][1]%>" data-team-name="<%=@MLB_ranks[i][0].gsub('.', '').gsub(' ', '_')%>_img" class="img-responsive img-thumbnail <%=@MLB_ranks[i][0].gsub('.', '').gsub(' ', '_')%>_img" onmouseover="highlightTeam(this)" onmouseout="unhighlightTeam(this)" src="<%= @images[@MLB_ranks[i][0]] %>">
+            </span>
+            <% else %>
+            <span>
+              <img class="img-responsive img-thumbnail img-thumbnail" src="<%= @images["empty"] %>">
+            </span>
+            <% end %>
+          </td>  
+
+        </tr>
+        <% end %>
+      </table>
+    </div>
+
+    <div id="right_col_container" role="group" class="btn-group-vertical col-sm-3">
+      <div class="row">
+        <% for i in 1..6 %>
+          <a href="/ranks/week/<%=i%>" class="btn btn-primary col-md-12">Week <%= i %></a>
+        <% end %>
+      </div>
+      <div id="description_container" class="row">
+        <p class="col-sm-12"> <h3>Justification: </h3><br/><span id="description_display"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <p class="col-sm-4"></p>
+    <a href class="col-sm-4"></p>
+    <p class="col-sm-4"></p>
+  </div>
+</div>

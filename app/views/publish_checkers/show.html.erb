@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Website:</strong>
+  <%= @publish_checker.website %>
+</p>
+
+<p>
+  <strong>Publish tok:</strong>
+  <%= @publish_checker.publish_tok %>
+</p>
+
+<p>
+  <strong>Week:</strong>
+  <%= @publish_checker.week %>
+</p>
+
+<p>
+  <strong>Year:</strong>
+  <%= @publish_checker.year %>
+</p>
+
+<%= link_to 'Edit', edit_publish_checker_path(@publish_checker) %> |
+<%= link_to 'Back', publish_checkers_path %>

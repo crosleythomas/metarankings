@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MLB Power Rankings</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<div>
+	<header  class="site-header">
+		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		  <div class="container-fluid" style="background-color: crimson;">
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a style="color: white" class="navbar-brand" href="/">Meta Rankings</a>
+		    </div>
+		    <div class="collapse navbar-collapse">
+		      <ul class="nav navbar-nav">
+				<li>
+		          <a style="color: white" href="/">Rankings</a>
+		        </li><li>
+		          <a style="color: white" href="/statistics">Statistics</a>
+		        </li><li>
+		          <a style="color: white" href="/about">About</a>
+		      </li></ul>
+		      <ul class="nav navbar-nav navbar-right hidden-xs">
+		        <li><a style="color: white">MLB</a></li>
+		      </ul>
+		    </div><!-- /.nav-collapse -->
+		  </div><!-- /.container -->
+		</div>
+	</header>
+</div>
+<div style="margin-top: 60px;">
+<%= yield %>
+</div>
+</body>
+</html>
+
+

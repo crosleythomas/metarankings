@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Website:</strong>
+  <%= @rank.website %>
+</p>
+
+<p>
+  <strong>Team:</strong>
+  <%= @rank.team %>
+</p>
+
+<p>
+  <strong>Rank:</strong>
+  <%= @rank.rank %>
+</p>
+
+<p>
+  <strong>Week:</strong>
+  <%= @rank.week %>
+</p>
+
+<p>
+  <strong>Year:</strong>
+  <%= @rank.year %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @rank.description %>
+</p>
+
+<p>
+  <strong>Article link:</strong>
+  <%= @rank.article_link %>
+</p>
+
+<p>
+  <strong>Published:</strong>
+  <%= @rank.published %>
+</p>
+
+<%= link_to 'Edit', edit_rank_path(@rank) %> |
+<%= link_to 'Back', ranks_path %>

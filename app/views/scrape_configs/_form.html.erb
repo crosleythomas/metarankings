@@ -1,0 +1,65 @@
+<%= form_for(@scrape_config) do |f| %>
+  <% if @scrape_config.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@scrape_config.errors.count, "error") %> prohibited this scrape_config from being saved:</h2>
+
+      <ul>
+      <% @scrape_config.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :website %><br>
+    <%= f.text_field :website %>
+  </div>
+  <div class="field">
+    <%= f.label :url %><br>
+    <%= f.text_field :url %>
+  </div>
+  <div class="field">
+    <%= f.label :rank_xpath %><br>
+    <%= f.text_field :rank_xpath %>
+  </div>
+  <div class="field">
+    <%= f.label :rank_regex %><br>
+    <%= f.text_field :rank_regex %>
+  </div>
+  <div class="field">
+    <%= f.label :team_xpath %><br>
+    <%= f.text_field :team_xpath %>
+  </div>
+  <div class="field">
+    <%= f.label :team_regex %><br>
+    <%= f.text_field :team_regex %>
+  </div>
+  <div class="field">
+    <%= f.label :description_xpath %><br>
+    <%= f.text_field :description_xpath %>
+  </div>
+  <div class="field">
+    <%= f.label :description_regex %><br>
+    <%= f.text_field :description_regex %>
+  </div>
+  <div class="field">
+    <%= f.label :update_checker_xpath %><br>
+    <%= f.text_field :update_checker_xpath %>
+  </div>
+  <div class="field">
+    <%= f.label :update_checker_regex %><br>
+    <%= f.text_field :update_checker_regex %>
+  </div>
+  <div class="field">
+    <%= f.label :week %><br>
+    <%= f.number_field :week %>
+  </div>
+  <div class="field">
+    <%= f.label :year %><br>
+    <%= f.number_field :year %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

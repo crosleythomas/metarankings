@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Team:</strong>
+  <%= @standing.team %>
+</p>
+
+<p>
+  <strong>Week:</strong>
+  <%= @standing.week %>
+</p>
+
+<p>
+  <strong>Year:</strong>
+  <%= @standing.year %>
+</p>
+
+<p>
+  <strong>Wins:</strong>
+  <%= @standing.wins %>
+</p>
+
+<p>
+  <strong>Losses:</strong>
+  <%= @standing.losses %>
+</p>
+
+<p>
+  <strong>Percentage:</strong>
+  <%= @standing.percentage %>
+</p>
+
+<%= link_to 'Edit', edit_standing_path(@standing) %> |
+<%= link_to 'Back', standings_path %>

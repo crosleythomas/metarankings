@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  website: MyString
+  publish_tok: MyString
+  week: 1
+  year: 1
+
+two:
+  website: MyString
+  publish_tok: MyString
+  week: 1
+  year: 1

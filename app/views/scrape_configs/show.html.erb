@@ -1,0 +1,64 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Website:</strong>
+  <%= @scrape_config.website %>
+</p>
+
+<p>
+  <strong>Url:</strong>
+  <%= @scrape_config.url %>
+</p>
+
+<p>
+  <strong>Rank xpath:</strong>
+  <%= @scrape_config.rank_xpath %>
+</p>
+
+<p>
+  <strong>Rank regex:</strong>
+  <%= @scrape_config.rank_regex %>
+</p>
+
+<p>
+  <strong>Team xpath:</strong>
+  <%= @scrape_config.team_xpath %>
+</p>
+
+<p>
+  <strong>Team regex:</strong>
+  <%= @scrape_config.team_regex %>
+</p>
+
+<p>
+  <strong>Description xpath:</strong>
+  <%= @scrape_config.description_xpath %>
+</p>
+
+<p>
+  <strong>Description regex:</strong>
+  <%= @scrape_config.description_regex %>
+</p>
+
+<p>
+  <strong>Update checker xpath:</strong>
+  <%= @scrape_config.update_checker_xpath %>
+</p>
+
+<p>
+  <strong>Update checker regex:</strong>
+  <%= @scrape_config.update_checker_regex %>
+</p>
+
+<p>
+  <strong>Week:</strong>
+  <%= @scrape_config.week %>
+</p>
+
+<p>
+  <strong>Year:</strong>
+  <%= @scrape_config.year %>
+</p>
+
+<%= link_to 'Edit', edit_scrape_config_path(@scrape_config) %> |
+<%= link_to 'Back', scrape_configs_path %>

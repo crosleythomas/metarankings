@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  website: MyString
+  url: MyString
+  rank_xpath: MyString
+  rank_regex: MyString
+  team_xpath: MyString
+  team_regex: MyString
+  description_xpath: MyString
+  description_regex: MyString
+  update_checker_xpath: MyString
+  update_checker_regex: MyString
+  week: 1
+  year: 1
+
+two:
+  website: MyString
+  url: MyString
+  rank_xpath: MyString
+  rank_regex: MyString
+  team_xpath: MyString
+  team_regex: MyString
+  description_xpath: MyString
+  description_regex: MyString
+  update_checker_xpath: MyString
+  update_checker_regex: MyString
+  week: 1
+  year: 1

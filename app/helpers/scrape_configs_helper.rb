@@ -1,0 +1,2 @@
+module ScrapeConfigsHelper
+end

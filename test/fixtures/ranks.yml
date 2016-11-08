@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  website: MyString
+  team: MyString
+  rank: 1
+  week: 1
+  year: 1
+  description: MyString
+  article_link: MyString
+  published: 2015-04-06 23:56:12
+
+two:
+  website: MyString
+  team: MyString
+  rank: 1
+  week: 1
+  year: 1
+  description: MyString
+  article_link: MyString
+  published: 2015-04-06 23:56:12
